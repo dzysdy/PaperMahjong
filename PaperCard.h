@@ -18,7 +18,7 @@ public:
         CT_WAN = 41,
         CT_WHITE = 61,
         CT_RED = 71,
-        CT_QIAN = 81
+        CT_SHARKS = 81
     };
 
     explicit PaperCard(unsigned number, QObject *parent = 0);

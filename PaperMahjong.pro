@@ -48,4 +48,6 @@ HEADERS  += MainWindow.h \
     MajhongAlgorithm.h \
     MajhongAlgorithmWraper.h
 
+DISTFILES += ./resource/t_1.jpg
+
 FORMS    += mainwindow.ui

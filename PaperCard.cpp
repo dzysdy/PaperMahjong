@@ -37,8 +37,8 @@ void PaperCard::setNameByNumber(unsigned number)
         case CT_RED:
             name = "red";
             break;
-        case CT_QIAN:
-            name = "qian";
+        case CT_SHARKS:
+            name = "sharks";
             break;
         default:
             assert(false);

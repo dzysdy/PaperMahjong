@@ -11,7 +11,7 @@ void PaperMahjong::shuffleCards() {
     initCustomCard(PaperCard::CT_WAN);
     initFourCards(PaperCard::CT_RED);
     initFourCards(PaperCard::CT_WHITE);
-    initFourCards(PaperCard::CT_QIAN);
+    initFourCards(PaperCard::CT_SHARKS);
 }
 
 void PaperMahjong::dealingCards(unsigned num, QList<PaperCard *> &paperCards) {
