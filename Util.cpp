@@ -3,6 +3,6 @@
 
 QString Util::getResourcePath()
 {
-    return "D:\\workspace\\PaperMahjong\\resource\\";
+    return "/home/dzy/code/private/PaperMahjong/resource/";
     //return QDir::currentPath() + "/";
 }

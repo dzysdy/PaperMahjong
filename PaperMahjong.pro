@@ -34,7 +34,11 @@ SOURCES += main.cpp\
     CardsWidget.cpp \
     HappyGroupWidget.cpp \
     MajhongAlgorithm.cpp \
-    MajhongAlgorithmWraper.cpp
+    MajhongAlgorithmWraper.cpp \
+    HappyGroupHelper.cpp \
+    WorkDesk.cpp \
+    Controller.cpp \
+    AIController.cpp
 
 HEADERS  += MainWindow.h \
     PaperMahjong.h \
@@ -46,8 +50,10 @@ HEADERS  += MainWindow.h \
     CardsWidget.h \
     HappyGroupWidget.h \
     MajhongAlgorithm.h \
-    MajhongAlgorithmWraper.h
-
-DISTFILES += ./resource/t_1.jpg
+    MajhongAlgorithmWraper.h \
+    HappyGroupHelper.h \
+    WorkDesk.h \
+    Controller.h \
+    AIController.h
 
 FORMS    += mainwindow.ui

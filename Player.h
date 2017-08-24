@@ -6,7 +6,7 @@
 class PaperCard;
 class PaperMahjong;
 class MajhongAlgorithmWraper;
-
+class Controller;
 enum PlayerOperation {
     PO_NONE,
     PO_EAT,
@@ -30,16 +30,19 @@ public:
     QList<PaperCard*> cards() {return paperCards;}
 
     void initCards(const QList<PaperCard*>& cards);
-    bool drawsCard();
+    PaperCard* drawsCard();
     bool removeCard(PaperCard* card);
 
     bool eat(const QList<PaperCard *> &cards);
     bool doubleEat(const QList<PaperCard*>& cards);
     bool singleEat(const QList<PaperCard*>& cards);
     bool makeHappyGroup(const QList<PaperCard *> &cards);
+    void makeHappyGroupOk();
 
-    void onFirstStep(int operation);
-    void onSecondStep(int operation);
+    void doFirstStep(int operation);
+    void doSecondStep(int operation);
+
+    QWidget* desk();
 
 signals:
     void firstStepCompleted(PlayerOperation operation);
@@ -56,6 +59,7 @@ private:
     PaperMahjong* paperMahjong;
     QList<PaperCard*> paperCards;
     MajhongAlgorithmWraper* algorithm;
+    Controller* controller;
     PlayerOperation lastOperation;
     int step;
 };

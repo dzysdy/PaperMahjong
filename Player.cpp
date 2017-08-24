@@ -3,12 +3,16 @@
 #include "PaperMahjong.h"
 #include "PaperCard.h"
 #include "MajhongAlgorithmWraper.h"
+#include "WorkDesk.h"
+#include "AIController.h"
+#include "CardsWidget.h"
 #include <algorithm>
 
 Player::Player(PaperMahjong* mahjong, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
-    algorithm(MajhongAlgorithmWraper::instance())
+    algorithm(MajhongAlgorithmWraper::instance()),
+    controller(new WorkDesk())
 {
 
 }
@@ -17,14 +21,15 @@ void Player::initCards(const QList<PaperCard *>& cards)
 {
     paperCards.append(cards);
     std::sort(paperCards.begin(), paperCards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
+    controller->getCardsWidget()->addCard(paperCards);
 }
 
-bool Player::drawsCard() {
+PaperCard* Player::drawsCard() {
     PaperCard* card = paperMahjong->getCard();
     addOneCard(card);
     lastOperation = PO_MO;
     notifyStepCompleted();
-    return true;
+    return card;
 }
 
 bool Player::removeCard(PaperCard* card)
@@ -69,20 +74,29 @@ bool Player::makeHappyGroup(const QList<PaperCard* >& cards)
 {
     if (algorithm->isHappyGroup(cards)) {
         lastOperation = PO_LIAOXI;
-        emit makedHappyGroup();
         return true;
     }
     return false;
 }
 
-void Player::onFirstStep(int /*operation*/)
+void Player::makeHappyGroupOk()
+{
+    emit makedHappyGroup();
+}
+
+void Player::doFirstStep(int /*operation*/)
 {
     step = 1;
 }
 
-void Player::onSecondStep(int /*operation*/)
+void Player::doSecondStep(int /*operation*/)
 {
     step = 2;
+}
+
+QWidget *Player::desk()
+{
+    return controller->widget();
 }
 
 void Player::onMakeHappyGroup()

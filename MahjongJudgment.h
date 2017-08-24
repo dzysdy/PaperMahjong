@@ -3,10 +3,10 @@
 
 #include <QObject>
 #include <QTimer>
+#include "Player.h"
 
 class Player;
 class PaperMahjong;
-enum PlayerOperation;
 class MahjongJudgment : public QObject
 {
     Q_OBJECT
@@ -45,7 +45,7 @@ private:
     void changeTurn();
     Player *currentPlayer();
     void doHappyGroupStep();
-    void doFirstStep();
+    void doFirstStep(PlayerOperation operation);
     void doSecondStep(PlayerOperation operation);
     void enforce();
     void calcOperatrion(PlayerOperation lastOperation, QList<PlayerOperation> &operations);
@@ -57,6 +57,7 @@ private:
     int timeReminded;
     bool isTimeRecording;
     OperatStep currentStep;
+    OperatStep lastStep;
 };
 
 #endif // MAHJONGJUDGMENT_H

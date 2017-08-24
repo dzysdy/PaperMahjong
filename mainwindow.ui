@@ -14,28 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>410</y>
-      <width>771</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="buttonLayout"/>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>520</y>
-      <width>771</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="cardsLayout"/>
-   </widget>
    <widget class="QLCDNumber" name="remaindTime">
     <property name="geometry">
      <rect>
@@ -46,62 +24,37 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="startBtn">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>240</y>
-      <width>251</width>
-      <height>121</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1181</width>
+      <height>771</height>
      </rect>
     </property>
-    <property name="text">
-     <string>新的一局</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>20</y>
-      <width>771</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="player2CardsLayout"/>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>281</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="player2XiLayout"/>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_5">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>470</y>
-      <width>281</width>
-      <height>291</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="player1XiLayout"/>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_6">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>230</y>
-      <width>91</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="drawedCardArea"/>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item alignment="Qt::AlignTop">
+      <widget class="QWidget" name="upWidget" native="true"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="drawedCardArea"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="startBtn">
+         <property name="text">
+          <string>新的一局</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QWidget" name="downWidget" native="true"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

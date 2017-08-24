@@ -1,5 +1,4 @@
 #include "MahjongJudgment.h"
-#include "Player.h"
 #include "PaperMahjong.h"
 
 #define BEFORE_DRAWSCARD_TIME 30
@@ -42,26 +41,36 @@ void MahjongJudgment::onTimer()
 
 void MahjongJudgment::onFirstStepCompleted(PlayerOperation operation)
 {
+    lastStep = OS_FIRSTSTEP;
     isTimeRecording = false;
     doSecondStep(operation);
 }
 
 void MahjongJudgment::onSecondStepCompleted(PlayerOperation operation)
 {
+    lastStep = OS_SECONDSTEP;
     switch (operation) {
     case PO_DA:
+        changeTurn();
+        doFirstStep(operation);
         break;
-        default:
+    case PO_LIAOXI:
+        doFirstStep(operation);
+        break;
+    case PO_HU:
+        printf("game over");fflush(stdout);
+        break;
+    default:
+        printf("error operation in second step");fflush(stdout);
         break;
     }
-    changeTurn();
-    doFirstStep();
 }
 
 void MahjongJudgment::onMakedHappyGroup()
 {
+    lastStep = OS_HAPPYGROUP;
     isTimeRecording = false;
-    doFirstStep();
+    doSecondStep(PO_NONE);
 }
 
 void MahjongJudgment::playersDrawsCards()
@@ -96,46 +105,83 @@ Player *MahjongJudgment::currentPlayer()
 
 void MahjongJudgment::doHappyGroupStep()
 {
-    emit makeHappyGroup();
     currentStep = OS_HAPPYGROUP;
+    emit makeHappyGroup();
     timeReminded = AFTER_DRAWSCARD_TIME;
     isTimeRecording = true;
 }
 
-void MahjongJudgment::doFirstStep()
+void MahjongJudgment::doFirstStep(PlayerOperation operation)
 {
-    Player* player = currentPlayer();
-    player->onFirstStep(0);
     currentStep = OS_FIRSTSTEP;
+    QList<PlayerOperation> operations;
+    calcOperatrion(operation, operations);
+    emit firstStep(operations);
+    Player* player = currentPlayer();
+    player->doFirstStep(0);
     timeReminded = BEFORE_DRAWSCARD_TIME;
     isTimeRecording = true;
-    QList<PlayerOperation> operations;
-    calcOperatrion(PO_NONE, operations);
-    emit firstStep(operations);
 }
 
 void MahjongJudgment::doSecondStep(PlayerOperation operation)
 {
-    if (operation == PO_NONE)
-        return;
-    Player* player = currentPlayer();
-    player->onSecondStep(0);
     currentStep = OS_SECONDSTEP;
-    timeReminded = AFTER_DRAWSCARD_TIME;
-    isTimeRecording = true;
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
     emit secondStep(operations);
+    Player* player = currentPlayer();
+    player->doSecondStep(0);
+    timeReminded = AFTER_DRAWSCARD_TIME;
+    isTimeRecording = true;
 }
 
 void MahjongJudgment::enforce()
 {
-    //Player* player = currentPlayer();
-
+    Player* player = currentPlayer();
+    switch (currentStep) {
+    case OS_HAPPYGROUP:
+        for (Player* p: players) {
+            if (p->cards().size()%3 == 2)
+                p->removeCard(p->cards().first());
+            p->makeHappyGroupOk();
+        }
+        break;
+    case OS_FIRSTSTEP:
+        player->drawsCard();
+        break;
+    case OS_SECONDSTEP:
+        player->removeCard(player->cards().first());
+        break;
+    default:
+        break;
+    }
 }
 
 void MahjongJudgment::calcOperatrion(PlayerOperation lastOperation, QList<PlayerOperation>& operations)
 {
-
-    operations.push_back(PO_DA);
+    switch (lastStep) {
+    case OS_HAPPYGROUP:
+        operations.push_back(PO_DA);
+        break;
+    case OS_FIRSTSTEP:
+        if (lastOperation == PO_MO){
+            operations.push_back(PO_GUOXI);
+            operations.push_back(PO_HU);
+        }
+        else {
+            operations.push_back(PO_DA);
+        }
+        break;
+    case OS_SECONDSTEP:
+        if (lastOperation == PO_DA) {
+            operations.push_back(PO_EAT);
+            operations.push_back(PO_PENG);
+            operations.push_back(PO_DING);
+            operations.push_back(PO_HU);
+        }
+        operations.push_back(PO_MO);
+        break;
+    default:
+        break;
+    }
 }
