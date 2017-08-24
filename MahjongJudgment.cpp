@@ -75,12 +75,13 @@ void MahjongJudgment::onMakedHappyGroup()
 
 void MahjongJudgment::playersDrawsCards()
 {
+    bool first = true;
     for (Player* player : players) {
         QList<PaperCard*> cards;
-        paperMahjong->dealingCards(16, cards);
+        paperMahjong->dealingCards(first? 17: 16, cards);
+        first = false;
         player->initCards(cards);
     }
-    players.first()->drawsCard();
 }
 
 void MahjongJudgment::connectSignals(Player *player)
@@ -168,9 +169,7 @@ void MahjongJudgment::calcOperatrion(PlayerOperation lastOperation, QList<Player
             operations.push_back(PO_GUOXI);
             operations.push_back(PO_HU);
         }
-        else {
-            operations.push_back(PO_DA);
-        }
+        operations.push_back(PO_DA);
         break;
     case OS_SECONDSTEP:
         if (lastOperation == PO_DA) {

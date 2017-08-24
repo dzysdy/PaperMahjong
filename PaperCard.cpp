@@ -1,6 +1,7 @@
 #include "PaperCard.h"
 #include <assert.h>
 #include <QDebug>
+
 PaperCard::PaperCard(unsigned number, QObject *parent) :
     QObject(parent),
     cardNumber(number)

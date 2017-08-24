@@ -8,13 +8,13 @@
 #include "CardsWidget.h"
 #include <algorithm>
 
-Player::Player(PaperMahjong* mahjong, QObject *parent) :
+Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
-    algorithm(MajhongAlgorithmWraper::instance()),
-    controller(new WorkDesk())
+    algorithm(MajhongAlgorithmWraper::instance())
 {
-
+    controller = new WorkDesk(this);
+    controller->connectSignals(judgment);
 }
 
 void Player::initCards(const QList<PaperCard *>& cards)
@@ -81,16 +81,19 @@ bool Player::makeHappyGroup(const QList<PaperCard* >& cards)
 
 void Player::makeHappyGroupOk()
 {
+    controller->showBtnWidget(false);
     emit makedHappyGroup();
 }
 
 void Player::doFirstStep(int /*operation*/)
 {
+    controller->showBtnWidget(true);
     step = 1;
 }
 
 void Player::doSecondStep(int /*operation*/)
 {
+    controller->showBtnWidget(true);
     step = 2;
 }
 
@@ -101,7 +104,7 @@ QWidget *Player::desk()
 
 void Player::onMakeHappyGroup()
 {
-
+    controller->showBtnWidget(true);
 }
 
 void Player::addOneCard(PaperCard *card) {
@@ -113,10 +116,16 @@ void Player::addOneCard(PaperCard *card) {
 
 void Player::notifyStepCompleted()
 {
+    controller->showBtnWidget(false);
     if (step == 1) {
         emit firstStepCompleted(lastOperation);
     }
     else if (step == 2) {
         emit secondStepCompleted(lastOperation);
     }
+}
+
+Controller *Player::getController() const
+{
+    return controller;
 }

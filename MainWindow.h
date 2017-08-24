@@ -26,6 +26,7 @@ public:
 
 private slots:
     void on_startBtn_clicked();
+    void onUpdateDrawedArea(CardContainer *container);
 
 private:
     void initail();
@@ -35,6 +36,7 @@ private:
     MahjongJudgment* judgment;
     Player* player1;
     Player* player2;
+    CardContainer* drawedCardContainer;
 };
 
 #endif // MAINWINDOW_H

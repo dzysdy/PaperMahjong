@@ -5,7 +5,7 @@
 class AIController : public Controller
 {
 public:
-    AIController();
+    AIController(Player* p, QObject *parent = 0);
 };
 
 #endif // AICONTROLLER_H

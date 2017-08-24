@@ -1,6 +1,7 @@
 #include "AIController.h"
 
-AIController::AIController()
+AIController::AIController(Player *p, QObject *parent):
+    Controller(p, parent)
 {
 
 }

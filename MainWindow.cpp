@@ -6,6 +6,7 @@
 #include "CardsWidget.h"
 #include "CardContainer.h"
 #include "HappyGroupWidget.h"
+#include "Controller.h"
 #include "Util.h"
 #include <QPushButton>
 #include <QMessageBox>
@@ -28,22 +29,31 @@ void MainWindow::initail()
 {
     mahjong = new PaperMahjong();
     judgment = new MahjongJudgment(mahjong);
-    player1 = new Player(mahjong);
-    player2 = new Player(mahjong);
+    player1 = new Player(mahjong, judgment);
+    player2 = new Player(mahjong, judgment);
     judgment->addPlayer(player1);
     judgment->addPlayer(player2);
-    player1->desk()->setParent(ui->upWidget);
-    player2->desk()->setParent(ui->downWidget);
+    ui->downLayout->addWidget(player1->desk());
+    ui->upLayout->addWidget(player2->desk());
+    connect(player1->getController(), &Controller::updateDrawedArea, this, &MainWindow::onUpdateDrawedArea);
+    connect(player2->getController(), &Controller::updateDrawedArea, this, &MainWindow::onUpdateDrawedArea);
+}
+
+void MainWindow::onUpdateDrawedArea(CardContainer *container)
+{
+    if (drawedCardContainer) {
+        drawedCardContainer->setParent(nullptr);
+        ui->drawedCardArea->removeWidget(drawedCardContainer);
+        delete drawedCardContainer;
+    }
+    drawedCardContainer = container;
+    ui->drawedCardArea->addWidget(drawedCardContainer);
 }
 
 void MainWindow::on_startBtn_clicked()
 {
-    //drawedCardContainer = nullptr;
-    //cardsWidget = new CardsWidget(this);
+    drawedCardContainer = nullptr;
     judgment->start();
-    //cardsWidget->initail(17);
-    //cardsWidget->addCard(player1->cards());
-    //ui->cardsLayout->addWidget(cardsWidget);
     ui->startBtn->hide();
 }
 

@@ -61,8 +61,13 @@ void CardsWidget::setMode(CardsSelectedMode mode)
 
 QList<CardContainer*> CardsWidget::takeSelectedCards()
 {
+    //to bee done
+    //1 shold return PaperCard not container.
+    //2 change to mvc, this is a view, papercards is model.
     QList<CardContainer*> containers;
     for (CardContainer* container : selectedContainers) {
+        cardsNum--;
+        cardContainers.removeOne(container);
         container->setParent(nullptr);
         layout->removeWidget(container);
         containers.push_back(container);

@@ -16,7 +16,8 @@ enum PlayerOperation {
     PO_DA,
     PO_MO,
     PO_LIAOXI,
-    PO_GUOXI
+    PO_GUOXI,
+    PO_OK
 };
 
 class Player : public QObject
@@ -25,7 +26,7 @@ class Player : public QObject
 
     friend class MahjongJudgment;
 public:
-    explicit Player(PaperMahjong* mahjong, QObject *parent = 0);
+    explicit Player(PaperMahjong* mahjong, MahjongJudgment* judgment, QObject *parent = 0);
 
     QList<PaperCard*> cards() {return paperCards;}
 
@@ -43,6 +44,7 @@ public:
     void doSecondStep(int operation);
 
     QWidget* desk();
+    Controller *getController() const;
 
 signals:
     void firstStepCompleted(PlayerOperation operation);

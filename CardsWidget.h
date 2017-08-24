@@ -6,6 +6,7 @@
 class PaperCard;
 class QHBoxLayout;
 class CardContainer;
+
 class CardsWidget : public QWidget
 {
     Q_OBJECT
