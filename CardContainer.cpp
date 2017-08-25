@@ -1,4 +1,6 @@
 #include "CardContainer.h"
+#include "PaperCard.h"
+#include "Util.h"
 
 CardContainer::CardContainer(QWidget *parent) :
     QLabel(parent),
@@ -8,14 +10,34 @@ CardContainer::CardContainer(QWidget *parent) :
 
 CardContainer::CardContainer(const QString &text, QWidget *parent) :
     QLabel(text, parent),
-    isDown(true)
+    isDown(true),
+    paperCard(nullptr)
 {
 }
 
 void CardContainer::setImage(const QImage &image)
 {
-    if (!image.isNull())
-        setPixmap(QPixmap::fromImage(image.scaledToHeight(200)));
+    if (!image.isNull()) {
+        QImage img = image.scaledToHeight(200);
+        setPixmap(QPixmap::fromImage(img));
+        setMinimumWidth(img.width());
+        setMaximumWidth(img.width());
+    }
+}
+
+void CardContainer::setCard(PaperCard *card)
+{
+    paperCard = card;
+    moveBack();
+    if (paperCard) {
+        QImage image(Util::getResourcePath() + paperCard->getName());
+        setText(card->getName());
+        setImage(image);
+        show();
+    }
+    else {
+        hide();
+    }
 }
 
 void CardContainer::moveUpBack(bool up)
@@ -44,4 +66,9 @@ void CardContainer::moveBack()
         return;
     isDown = true;
     this->move(x(), y() + 20);
+}
+
+PaperCard *CardContainer::getPaperCard() const
+{
+    return paperCard;
 }

@@ -7,6 +7,8 @@ class PaperCard;
 class PaperMahjong;
 class MajhongAlgorithmWraper;
 class Controller;
+class MahjongJudgment;
+
 enum PlayerOperation {
     PO_NONE,
     PO_EAT,
@@ -27,24 +29,29 @@ class Player : public QObject
     friend class MahjongJudgment;
 public:
     explicit Player(PaperMahjong* mahjong, MahjongJudgment* judgment, QObject *parent = 0);
+    ~Player();
 
     QList<PaperCard*> cards() {return paperCards;}
 
     void initCards(const QList<PaperCard*>& cards);
     PaperCard* drawsCard();
+
     bool removeCard(PaperCard* card);
-
-    bool eat(const QList<PaperCard *> &cards);
-    bool doubleEat(const QList<PaperCard*>& cards);
-    bool singleEat(const QList<PaperCard*>& cards);
+    bool eat(const QList<PaperCard *> &myCards, PaperCard* drawedCard);
+    bool doubleEat(const QList<PaperCard *> &myCards, PaperCard* drawedCard);
+    bool singleEat(PaperCard* myCards, PaperCard* drawedCard);
     bool makeHappyGroup(const QList<PaperCard *> &cards);
-    void makeHappyGroupOk();
+    bool attachHappyGroup(PaperCard* card);
+    bool complete(PaperCard* card);
 
+    void makeHappyGroupOk();
     void doFirstStep(int operation);
     void doSecondStep(int operation);
 
     QWidget* desk();
     Controller *getController() const;
+
+    int getStep() const;
 
 signals:
     void firstStepCompleted(PlayerOperation operation);

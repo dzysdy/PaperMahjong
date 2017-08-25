@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMap>
+#include <QLabel>
 #include "Player.h"
 
 namespace Ui {
@@ -24,9 +25,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+signals:
+    void updateDrawedCard(PaperCard *card);
+
 private slots:
     void on_startBtn_clicked();
-    void onUpdateDrawedArea(CardContainer *container);
+    void onUpdateDrawedArea(PaperCard *card);
 
 private:
     void initail();
@@ -36,7 +40,7 @@ private:
     MahjongJudgment* judgment;
     Player* player1;
     Player* player2;
-    CardContainer* drawedCardContainer;
+    QLabel* drawedCardContainer;
 };
 
 #endif // MAINWINDOW_H

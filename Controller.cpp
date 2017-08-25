@@ -6,13 +6,14 @@
 
 Controller::Controller(Player *p, QObject *parent) :
     QObject(parent),
-    player(p)
+    player(p),
+    otherPlayersCard(nullptr)
 {
     desk = new QWidget();
-    QPalette pal;
-    pal.setColor(QPalette::Background, Qt::green);
-    desk->setAutoFillBackground(true);
-    desk->setPalette(pal);
+//    QPalette pal;
+//    pal.setColor(QPalette::Background, Qt::green);
+//    desk->setAutoFillBackground(true);
+//    desk->setPalette(pal);
     mainLayout = new QHBoxLayout();
     desk->setLayout(mainLayout);
 
@@ -81,4 +82,9 @@ void Controller::onSecondStep(QList<PlayerOperation> operations)
 {
     cardsWidget->setMode(CardsWidget::CSM_CUSTOM);
     showButtonsOnly(operations);
+}
+
+void Controller::onUpdatedDrawedCard(PaperCard *card)
+{
+    otherPlayersCard = card;
 }

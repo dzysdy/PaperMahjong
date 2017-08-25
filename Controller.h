@@ -23,20 +23,21 @@ public:
     QWidget* widget();
     CardsWidget *getCardsWidget() const;
     void connectSignals(MahjongJudgment* judgment);
-    virtual void showBtnWidget(bool show){}
+    virtual void showBtnWidget(bool){}
 
 signals:
-    void updateDrawedArea(CardContainer *container);
+    void updateDrawedArea(PaperCard *card);
 
 public slots:
     void onUpdateTime(unsigned sec);
     void onMakeHappyGroup();
     void onFirstStep(QList<PlayerOperation> operations);
     void onSecondStep(QList<PlayerOperation> operations);
+    void onUpdatedDrawedCard(PaperCard* card);
 
 protected:
-    virtual void showButtons(QList<PlayerOperation> operations){}
-    virtual void showButtonsOnly(QList<PlayerOperation> operations){}
+    virtual void showButtons(QList<PlayerOperation>){}
+    virtual void showButtonsOnly(QList<PlayerOperation>){}
     virtual void hideAllButtons(){}
 
     Player* player;
@@ -51,6 +52,7 @@ protected:
     CardsWidget* cardsWidget;
 
     QLCDNumber* timeRecoder;
+    PaperCard* otherPlayersCard;
 };
 
 #endif // CONTROLLER_H

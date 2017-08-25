@@ -26,16 +26,14 @@ WorkDesk::WorkDesk(Player *p, QObject *parent):
 
 void WorkDesk::showBtnWidget(bool show)
 {
-//    for (QPushButton* button: buttons) {
-//        if (show)
-//            button->show();
-//        else
-//            button->hide();
-//    }
+    showBtn = show;
+    if (!showBtn)
+        hideAllButtons();
 }
 
 void WorkDesk::initailButtons()
 {
+    showBtn = true;
     btnsLayout->addStretch(1);
     for (int i = 0; i < BUTTON_NUM; i++) {
         QString name = gButtons[i];
@@ -51,6 +49,8 @@ void WorkDesk::initailButtons()
 
 void WorkDesk::showButtons(QList<PlayerOperation> operations)
 {
+    if (!showBtn)
+        return;
     for (PlayerOperation operation : operations) {
         QString name = gButtons[operation - 1];
         buttons[name]->show();
@@ -70,16 +70,23 @@ void WorkDesk::hideAllButtons()
     }
 }
 
+void WorkDesk::moveToCardGroupArea(QList<PaperCard *> cards)
+{
+    HappyGroupWidget* hg = new HappyGroupWidget();
+    hg->setCards(cards);
+    leftLayout->addWidget(hg);
+}
+
 void WorkDesk::onOperatBtnClicked()
 {
+    if (player->getStep() == 2) {
+        otherPlayersCard = nullptr;
+    }
     QPushButton* button = static_cast<QPushButton*>(sender());
     QString name = button->text();
     if (name == "liaoxi") {
         if (player->makeHappyGroup(cardsWidget->getSelectedCards())) {
-            QList<CardContainer*> containers = cardsWidget->takeSelectedCards();
-            HappyGroupWidget* hg = new HappyGroupWidget();
-            hg->setCardContainers(containers);
-            leftLayout->addWidget(hg);
+            moveToCardGroupArea(cardsWidget->takeSelectedCards());
         }
         else {
             QMessageBox::information(NULL, "Warning", "Not a Hapyy Group.", QMessageBox::Ok, QMessageBox::Ok);
@@ -95,13 +102,44 @@ void WorkDesk::onOperatBtnClicked()
         QList<PaperCard *> cards = cardsWidget->getSelectedCards();
         if (cards.size() == 1) {
             if (player->removeCard(cards.first())) {
-                QList<CardContainer*> containers = cardsWidget->takeSelectedCards();
-                emit updateDrawedArea(containers.first());
+                emit updateDrawedArea(cardsWidget->takeSelectedCards().first());
             }
         }
         else {
             QMessageBox::information(NULL, "Warning", "Please select a card first.", QMessageBox::Ok, QMessageBox::Ok);
         }
+    }
+    else if (name == "chi") {
+        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
+        if (player->eat(cards , otherPlayersCard)){
+            cardsWidget->takeSelectedCards();
+            cards.push_back(otherPlayersCard);
+            moveToCardGroupArea(cards);
+        }
+    }
+    else if (name == "peng") {
+        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
+        if (player->doubleEat(cards, otherPlayersCard)){
+            cardsWidget->takeSelectedCards();
+            cards.push_back(otherPlayersCard);
+            moveToCardGroupArea(cards);
+        }
+    }
+    else if (name == "ding") {
+        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
+        if (player->singleEat(cards.first(), otherPlayersCard)){
+            cardsWidget->takeSelectedCards();
+            cards.push_back(otherPlayersCard);
+            moveToCardGroupArea(cards);
+        }
+    }
+    else if (name == "hu") {
+        if (player->complete(otherPlayersCard)){
+            QMessageBox::information(NULL, "Congradulations!", "You Win! 200.", QMessageBox::Ok, QMessageBox::Ok);
+        }
+    }
+    else if (name == "guoxi") {
+        player->attachHappyGroup(cardsWidget->getSelectedCards().first());
     }
     else if (name == "ok") {
         player->makeHappyGroupOk();

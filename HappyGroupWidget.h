@@ -3,21 +3,17 @@
 
 #include <QWidget>
 
-class QVBoxLayout;
-class CardContainer;
+class PaperCard;
 class HappyGroupWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit HappyGroupWidget(QWidget *parent = 0);
 
-    void setCardContainers(QList<CardContainer*> containers);
+    void setCards(QList<PaperCard*> cards);
 signals:
 
 public slots:
-
-private:
-    QVBoxLayout* layout;
 };
 
 #endif // HAPPYGROUPWIDGET_H

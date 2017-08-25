@@ -70,7 +70,8 @@ void MahjongJudgment::onMakedHappyGroup()
 {
     lastStep = OS_HAPPYGROUP;
     isTimeRecording = false;
-    doSecondStep(PO_NONE);
+    if (++playerCompletedNums == players.size())
+        doSecondStep(PO_NONE);
 }
 
 void MahjongJudgment::playersDrawsCards()
@@ -106,6 +107,7 @@ Player *MahjongJudgment::currentPlayer()
 
 void MahjongJudgment::doHappyGroupStep()
 {
+    playerCompletedNums = 0;
     currentStep = OS_HAPPYGROUP;
     emit makeHappyGroup();
     timeReminded = AFTER_DRAWSCARD_TIME;
@@ -115,11 +117,10 @@ void MahjongJudgment::doHappyGroupStep()
 void MahjongJudgment::doFirstStep(PlayerOperation operation)
 {
     currentStep = OS_FIRSTSTEP;
+    currentPlayer()->doFirstStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
     emit firstStep(operations);
-    Player* player = currentPlayer();
-    player->doFirstStep(0);
     timeReminded = BEFORE_DRAWSCARD_TIME;
     isTimeRecording = true;
 }
@@ -127,11 +128,10 @@ void MahjongJudgment::doFirstStep(PlayerOperation operation)
 void MahjongJudgment::doSecondStep(PlayerOperation operation)
 {
     currentStep = OS_SECONDSTEP;
+    currentPlayer()->doSecondStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
     emit secondStep(operations);
-    Player* player = currentPlayer();
-    player->doSecondStep(0);
     timeReminded = AFTER_DRAWSCARD_TIME;
     isTimeRecording = true;
 }

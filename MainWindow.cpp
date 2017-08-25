@@ -14,7 +14,12 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mahjong(nullptr),
+    judgment(nullptr),
+    player1(nullptr),
+    player2(nullptr),
+    drawedCardContainer(nullptr)
 {
     ui->setupUi(this);
     initail();
@@ -22,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete player2;
+    delete player1;
+    delete judgment;
+    delete mahjong;
     delete ui;
 }
 
@@ -37,17 +46,25 @@ void MainWindow::initail()
     ui->upLayout->addWidget(player2->desk());
     connect(player1->getController(), &Controller::updateDrawedArea, this, &MainWindow::onUpdateDrawedArea);
     connect(player2->getController(), &Controller::updateDrawedArea, this, &MainWindow::onUpdateDrawedArea);
+    connect(this, &MainWindow::updateDrawedCard, player1->getController(), &Controller::onUpdatedDrawedCard);
+    connect(this, &MainWindow::updateDrawedCard, player2->getController(), &Controller::onUpdatedDrawedCard);
 }
 
-void MainWindow::onUpdateDrawedArea(CardContainer *container)
+void MainWindow::onUpdateDrawedArea(PaperCard *card)
 {
-    if (drawedCardContainer) {
-        drawedCardContainer->setParent(nullptr);
-        ui->drawedCardArea->removeWidget(drawedCardContainer);
-        delete drawedCardContainer;
+    if (!drawedCardContainer) {
+        drawedCardContainer = new QLabel();
+        ui->drawedCardArea->addWidget(drawedCardContainer);
     }
-    drawedCardContainer = container;
-    ui->drawedCardArea->addWidget(drawedCardContainer);
+    QImage image(Util::getResourcePath()+card->getName());
+    drawedCardContainer->setPixmap(QPixmap::fromImage(image.scaledToHeight(200)));
+    PaperCard* oldCard = static_cast<PaperCard*>(drawedCardContainer->userData(0));
+    delete oldCard;
+    if (card) {
+        emit updateDrawedCard(card);
+        drawedCardContainer->setUserData(0, card);
+        drawedCardContainer->update();
+    }
 }
 
 void MainWindow::on_startBtn_clicked()

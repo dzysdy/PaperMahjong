@@ -17,6 +17,11 @@ Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, QObject *parent
     controller->connectSignals(judgment);
 }
 
+Player::~Player()
+{
+    delete controller;
+}
+
 void Player::initCards(const QList<PaperCard *>& cards)
 {
     paperCards.append(cards);
@@ -40,9 +45,14 @@ bool Player::removeCard(PaperCard* card)
     return true;
 }
 
-bool Player::eat(const QList<PaperCard*>& cards)
+bool Player::eat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
 {
+    QList<PaperCard *> cards(myCards);
+    cards.push_back(drawedCard);
     if (algorithm->is3Straight(cards)) {
+        for (PaperCard* card: myCards) {
+            paperCards.removeOne(card);
+        }
         lastOperation = PO_EAT;
         notifyStepCompleted();
         return true;
@@ -50,9 +60,14 @@ bool Player::eat(const QList<PaperCard*>& cards)
     return false;
 }
 
-bool Player::doubleEat(const QList<PaperCard*>& cards)
+bool Player::doubleEat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
 {
+    QList<PaperCard *> cards(myCards);
+    cards.push_back(drawedCard);
     if (algorithm->is3Pairs(cards)) {
+        for (PaperCard* card: myCards) {
+            paperCards.removeOne(card);
+        }
         lastOperation = PO_PENG;
         notifyStepCompleted();
         return true;
@@ -60,9 +75,13 @@ bool Player::doubleEat(const QList<PaperCard*>& cards)
     return false;
 }
 
-bool Player::singleEat(const QList<PaperCard *> &cards)
+bool Player::singleEat(PaperCard* myCards, PaperCard* drawedCard)
 {
+    QList<PaperCard *> cards;
+    cards.push_back(myCards);
+    cards.push_back(drawedCard);
     if (algorithm->is2Pairs(cards)) {
+        paperCards.removeOne(myCards);
         lastOperation = PO_DING;
         notifyStepCompleted();
         return true;
@@ -74,6 +93,23 @@ bool Player::makeHappyGroup(const QList<PaperCard* >& cards)
 {
     if (algorithm->isHappyGroup(cards)) {
         lastOperation = PO_LIAOXI;
+        return true;
+    }
+    return false;
+}
+
+bool Player::attachHappyGroup(PaperCard *card)
+{
+    return false;
+}
+
+bool Player::complete(PaperCard *card)
+{
+    QList<PaperCard*> cards(paperCards);
+    if (card)
+        cards.push_back(card);
+    if (algorithm->isCompleteAHand(cards)){
+        lastOperation = PO_HU;
         return true;
     }
     return false;
@@ -123,6 +159,11 @@ void Player::notifyStepCompleted()
     else if (step == 2) {
         emit secondStepCompleted(lastOperation);
     }
+}
+
+int Player::getStep() const
+{
+    return step;
 }
 
 Controller *Player::getController() const

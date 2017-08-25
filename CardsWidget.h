@@ -23,7 +23,7 @@ public:
     void addCard(PaperCard* card);
     void addCard(const QList<PaperCard*> cards);
     void setMode(CardsSelectedMode mode);
-    QList<CardContainer*> takeSelectedCards();
+    QList<PaperCard *> takeSelectedCards();
     QList<PaperCard *> getSelectedCards() const;
 
 signals:

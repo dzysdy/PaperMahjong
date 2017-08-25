@@ -25,7 +25,7 @@ private:
         bool operator ==(const HappyGroup& that) {
             if (numbers.size() != that.numbers.size())
                 return false;
-            return std::equal(numbers.begin(), numbers.begin(), that.numbers.begin());
+            return std::equal(numbers.begin(), numbers.end(), that.numbers.begin());
         }
 
     private:

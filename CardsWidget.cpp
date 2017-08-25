@@ -3,6 +3,7 @@
 #include "PaperCard.h"
 #include "Util.h"
 #include <QHBoxLayout>
+#include <QDebug>
 
 CardsWidget::CardsWidget(QWidget *parent) :
     QWidget(parent),
@@ -26,14 +27,12 @@ void CardsWidget::initail(unsigned num)
 
 void CardsWidget::addCard(PaperCard *card)
 {
+    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
     if (cardContainers.size() - cardsNum > 0) {
-        CardContainer* cardContainer = cardContainers[cardsNum];
-        QImage image(Util::getResourcePath() + card->getName());
-        cardContainer->setText(card->getName());
-        cardContainer->setImage(image);
-        cardContainer->setUserData(0, card);
-        cardsNum++;
+        CardContainer* cardContainer = cardContainers[cardsNum++];
+        cardContainer->setCard(card);
     }
+    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
 }
 
 void CardsWidget::addCard(const QList<PaperCard *> cards)
@@ -59,30 +58,30 @@ void CardsWidget::setMode(CardsSelectedMode mode)
     csmMode = mode;
 }
 
-QList<CardContainer*> CardsWidget::takeSelectedCards()
+QList<PaperCard*> CardsWidget::takeSelectedCards()
 {
-    //to bee done
-    //1 shold return PaperCard not container.
-    //2 change to mvc, this is a view, papercards is model.
-    QList<CardContainer*> containers;
+    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
+    //change to mvc, this is a view, papercards is model.
+    QList<PaperCard*> cards;
     for (CardContainer* container : selectedContainers) {
         cardsNum--;
-        cardContainers.removeOne(container);
-        container->setParent(nullptr);
         layout->removeWidget(container);
-        containers.push_back(container);
+        cardContainers.removeOne(container);
+        container->hide();
+        layout->addWidget(container);
+        cardContainers.push_back(container);
+        cards.push_back(container->getPaperCard());
     }
-    this->update();
     selectedContainers.clear();
-    return containers;
+    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
+    return cards;
 }
 
 QList<PaperCard *> CardsWidget::getSelectedCards() const
 {
     QList<PaperCard *> selectedCards;
     for (CardContainer* container : selectedContainers) {
-        PaperCard* card = static_cast<PaperCard*>(container->userData(0));
-        selectedCards.push_back(card);
+        selectedCards.push_back(container->getPaperCard());
     }
     return selectedCards;
 }

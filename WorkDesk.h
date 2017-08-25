@@ -17,8 +17,10 @@ private:
     void showButtons(QList<PlayerOperation> operations);
     void showButtonsOnly(QList<PlayerOperation> operations);
     void hideAllButtons();
+    void moveToCardGroupArea(QList<PaperCard *> cards);
 
     QMap<QString, QPushButton*> buttons;
+    bool showBtn;
 };
 
 #endif // WORKDESK_H

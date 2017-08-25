@@ -58,6 +58,7 @@ private:
     bool isTimeRecording;
     OperatStep currentStep;
     OperatStep lastStep;
+    unsigned playerCompletedNums;
 };
 
 #endif // MAHJONGJUDGMENT_H

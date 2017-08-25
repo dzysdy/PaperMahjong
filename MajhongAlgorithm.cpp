@@ -30,69 +30,74 @@ bool MajhongAlgorithm::isHappyGroup(vector<unsigned> nums) {
     return HappyGroupHelper::isAHappGroup(nums);
 }
 
-using IntItor = vector<unsigned>::iterator;
-
-bool take2Pairs(IntItor begin, vector<unsigned>& nums) {
-    while (begin != nums.end()) {
-        if (is2Pairs(vector<unsigned>(begin, begin+1))) {
-            nums.erase(begin, begin + 1);
-            begin += 2;
-            return true;
-        }
-        begin++;
-    }
-    return false;
-}
-
-bool take3Pairs(vector<unsigned>& nums) {
-    if (nums.empty()) return true;
-    if (nums[0] == nums[1] && nums[0] == nums[2]) {
-        nums.erase(nums.begin(), nums.begin() + 2);
-        return true;
-    }
-    return false;
-}
-
-bool take3Straight(vector<unsigned>& nums) {
-    if (nums.empty()) return true;
-    if (nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2]) {
-        nums.erase(nums.begin(), nums.begin() + 2);
-        return true;
-    }
-    return false;
-}
-
-bool isCompleted(vector<unsigned>& nums) {
-    if (take3Pairs(nums) || take3Straight(nums)) {
-        if (nums.empty()) return true;
-        isCompleted(nums);
-    }
-    return false;
-}
-
 bool MajhongAlgorithm::isCompleteAHand(vector<unsigned> nums) {
     unsigned size = nums.size();
-    if (size%3 == 0 || size%3 == 2) {
+    if (size%3 == 0) {
         std::sort(nums.begin(), nums.end());
-        vector<unsigned> numsCopy(nums);
-
-        for (int i=0;i<nums.size() -1; i++) {
-            if (nums[i] == nums[i + 1]) {
-                break;
-            }
-        }
-        nums.erase(nums.begin()+i,nums.begin()+i+1);
-
-        if (nums.empty()) {
-            return true;
-        }
-        else {
-
-        }
-
-        return true;
+        return isAllStraightOrPairs(nums);
+    }
+    else if (size%3 == 2) {
+        std::sort(nums.begin(), nums.end());
+        unsigned index = 0;
+        bool h = true;
+        h = isCompleted(nums, index);
+        return h;
     }
     else {
         return false;
     }
+}
+
+bool MajhongAlgorithm::take2Pairs(vector<unsigned>& nums, unsigned& index) {
+    if (index > 0) {
+        unsigned num = nums[index-1];
+        while (nums[index] == num)
+            index++;
+    }
+
+    for (; index < nums.size() - 1; index++) {
+        if (nums[index] == nums[index + 1]) {
+            nums.erase(nums.begin() + index, nums.begin() + index + 2);
+            index += 2;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MajhongAlgorithm::take3Pairs(vector<unsigned>& nums) {
+    if (nums.empty()) return true;
+    if (nums[0] == nums[1] && nums[0] == nums[2]) {
+        nums.erase(nums.begin(), nums.begin() + 3);
+        return true;
+    }
+    return false;
+}
+
+bool MajhongAlgorithm::take3Straight(vector<unsigned>& nums) {
+    if (nums.empty()) return true;
+    if (nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2]) {
+        nums.erase(nums.begin(), nums.begin() + 3);
+        return true;
+    }
+    return false;
+}
+
+bool MajhongAlgorithm::isAllStraightOrPairs(vector<unsigned>& nums) {
+    while (take3Pairs(nums) || take3Straight(nums)) {
+        if (nums.empty())
+            return true;
+    }
+    return false;
+}
+
+bool MajhongAlgorithm::isCompleted(vector<unsigned>& nums, unsigned& index) {
+    vector<unsigned> numsCopy(nums);
+    while (take2Pairs(nums, index)) {
+        if (isAllStraightOrPairs(nums))
+            return true;
+        else
+            nums = numsCopy;
+    }
+    return false;
 }

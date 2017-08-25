@@ -1,20 +1,23 @@
 #include "HappyGroupWidget.h"
 #include "CardContainer.h"
+#include "PaperCard.h"
+#include "Util.h"
 #include <QVBoxLayout>
 
 HappyGroupWidget::HappyGroupWidget(QWidget *parent) :
     QWidget(parent)
 {
-    layout = new QVBoxLayout(this);
 }
 
-void HappyGroupWidget::setCardContainers(QList<CardContainer *> containers)
+void HappyGroupWidget::setCards(QList<PaperCard*> cards)
 {
-    if (containers.size() != 3)
-        return;
+//    if (cards.size() != 3)
+//        return;
     int i = 0;
-    for (CardContainer* c : containers) {
-        c->setParent(this);
-        c->move(0, c->y() + (i++)*c->height()*0.15);
+    for (PaperCard* card : cards) {
+        CardContainer* container = new CardContainer();
+        container->setCard(card);
+        container->setParent(this);
+        container->move(0, 0 + (i++)*container->height()*0.15);
     }
 }
