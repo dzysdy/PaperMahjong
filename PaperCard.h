@@ -8,6 +8,7 @@
  *  41-29 * 4
  *  61*4 71*4 81*4
  */
+
 class PaperCard : public QObject, public QObjectUserData
 {
     Q_OBJECT
@@ -29,6 +30,9 @@ public:
     QString getName() const;
     unsigned getCardNumber() const;
 
+    bool isSelected() const;
+    void setSelected(bool value);
+
 signals:
 
 public slots:
@@ -38,6 +42,7 @@ private:
 
     unsigned cardNumber;
     QString name;
+    bool selected;
 };
 
 #endif // PAPERCARD_H

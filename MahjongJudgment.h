@@ -48,6 +48,7 @@ private:
     void doFirstStep(PlayerOperation operation);
     void doSecondStep(PlayerOperation operation);
     void enforce();
+    void enforceDiscard(Player* player);
     void calcOperatrion(PlayerOperation lastOperation, QList<PlayerOperation> &operations);
 
     PaperMahjong* paperMahjong;

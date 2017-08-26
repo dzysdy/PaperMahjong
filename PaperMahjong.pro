@@ -31,14 +31,15 @@ SOURCES += main.cpp\
     MahjongJudgment.cpp \
     Util.cpp \
     CardContainer.cpp \
-    CardsWidget.cpp \
     HappyGroupWidget.cpp \
     MajhongAlgorithm.cpp \
     MajhongAlgorithmWraper.cpp \
     HappyGroupHelper.cpp \
     WorkDesk.cpp \
     Controller.cpp \
-    AIController.cpp
+    AIController.cpp \
+    CardView.cpp \
+    CardModel.cpp
 
 HEADERS  += MainWindow.h \
     PaperMahjong.h \
@@ -47,13 +48,14 @@ HEADERS  += MainWindow.h \
     MahjongJudgment.h \
     Util.h \
     CardContainer.h \
-    CardsWidget.h \
     HappyGroupWidget.h \
     MajhongAlgorithm.h \
     MajhongAlgorithmWraper.h \
     HappyGroupHelper.h \
     WorkDesk.h \
     Controller.h \
-    AIController.h
+    AIController.h \
+    CardView.h \
+    CardModel.h
 
 FORMS    += mainwindow.ui

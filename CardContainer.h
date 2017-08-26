@@ -12,8 +12,6 @@ public:
     CardContainer(const QString &text, QWidget *parent=Q_NULLPTR);
 
     void setCard(PaperCard* card);
-    void setImage(const QImage& image);
-    void moveUpBack(bool up);
     PaperCard *getPaperCard() const;
 
 protected:
@@ -23,11 +21,12 @@ signals:
     void clicked();
 
 private:
-    void moveUp();
-    void moveBack();
+    void setImage(const QImage& image);
+    void setSelected(bool b);
+    void updateView();
 
-    bool isDown;
     PaperCard* paperCard;
+    bool selected;
 };
 
 #endif // CARDCONTAINER_H

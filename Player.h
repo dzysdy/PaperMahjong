@@ -8,6 +8,7 @@ class PaperMahjong;
 class MajhongAlgorithmWraper;
 class Controller;
 class MahjongJudgment;
+class CardModel;
 
 enum PlayerOperation {
     PO_NONE,
@@ -35,14 +36,14 @@ public:
 
     void initCards(const QList<PaperCard*>& cards);
     PaperCard* drawsCard();
+    bool discard();
 
-    bool removeCard(PaperCard* card);
-    bool eat(const QList<PaperCard *> &myCards, PaperCard* drawedCard);
-    bool doubleEat(const QList<PaperCard *> &myCards, PaperCard* drawedCard);
-    bool singleEat(PaperCard* myCards, PaperCard* drawedCard);
-    bool makeHappyGroup(const QList<PaperCard *> &cards);
-    bool attachHappyGroup(PaperCard* card);
-    bool complete(PaperCard* card);
+    bool eat(PaperCard* drawedCard);
+    bool doubleEat(PaperCard* drawedCard);
+    bool singleEat(PaperCard* drawedCard);
+    bool makeHappyGroup();
+    bool attachHappyGroup();
+    bool complete(PaperCard* drawedCard);
 
     void makeHappyGroupOk();
     void doFirstStep(int operation);
@@ -62,13 +63,18 @@ public slots:
     void onMakeHappyGroup();
 
 private:
-    void addOneCard(PaperCard* card);
     void notifyStepCompleted();
+    QList<PaperCard*> getSelectedCards();
+
+    //update model
+    void addCardToModel(PaperCard* card);
+    void removeCardsFromModel(const QList<PaperCard *> &cards);
 
     PaperMahjong* paperMahjong;
-    QList<PaperCard*> paperCards;
-    MajhongAlgorithmWraper* algorithm;
     Controller* controller;
+    CardModel* cardModel;
+    QList<PaperCard*>& paperCards;
+    MajhongAlgorithmWraper* algorithm;
     PlayerOperation lastOperation;
     int step;
 };

@@ -1,17 +1,19 @@
 #include "CardContainer.h"
 #include "PaperCard.h"
 #include "Util.h"
+#include <QDebug>
 
 CardContainer::CardContainer(QWidget *parent) :
     QLabel(parent),
-    isDown(true)
+    paperCard(nullptr),
+    selected(false)
 {
 }
 
 CardContainer::CardContainer(const QString &text, QWidget *parent) :
     QLabel(text, parent),
-    isDown(true),
-    paperCard(nullptr)
+    paperCard(nullptr),
+    selected(false)
 {
 }
 
@@ -25,47 +27,47 @@ void CardContainer::setImage(const QImage &image)
     }
 }
 
+void CardContainer::setSelected(bool b)
+{
+    if (selected != b) {
+        selected = b;
+        updateView();
+    }
+}
+
 void CardContainer::setCard(PaperCard *card)
 {
+    setSelected(false);
     paperCard = card;
-    moveBack();
     if (paperCard) {
         QImage image(Util::getResourcePath() + paperCard->getName());
         setText(card->getName());
         setImage(image);
         show();
+        setSelected(paperCard->isSelected());
     }
     else {
         hide();
     }
 }
 
-void CardContainer::moveUpBack(bool up)
+void CardContainer::updateView()
 {
-    if (up)
-        moveUp();
-    else
-        moveBack();
+    if (selected) {
+        this->move(x(), y()-20);
+    }
+    else {
+        this->move(x(), y() + 20);
+    }
+    qDebug()<<__func__<<selected<<y();
+    if (paperCard)
+        paperCard->setSelected(selected);
 }
 
 void CardContainer::mousePressEvent(QMouseEvent *)
 {
-    moveUpBack(isDown);
+    setSelected(!selected);
     emit clicked();
-}
-
-void CardContainer::moveUp()
-{
-    isDown = false;
-    this->move(x(), y()-20);
-}
-
-void CardContainer::moveBack()
-{
-    if (isDown)
-        return;
-    isDown = true;
-    this->move(x(), y() + 20);
 }
 
 PaperCard *CardContainer::getPaperCard() const

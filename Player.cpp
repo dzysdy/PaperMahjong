@@ -5,54 +5,63 @@
 #include "MajhongAlgorithmWraper.h"
 #include "WorkDesk.h"
 #include "AIController.h"
-#include "CardsWidget.h"
+#include "CardView.h"
+#include "CardModel.h"
 #include <algorithm>
 
 Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
-    algorithm(MajhongAlgorithmWraper::instance())
+    algorithm(MajhongAlgorithmWraper::instance()),
+    controller(new WorkDesk(this)),
+    cardModel(new CardModel()),
+    paperCards(cardModel->cards)
 {
-    controller = new WorkDesk(this);
     controller->connectSignals(judgment);
 }
 
 Player::~Player()
 {
     delete controller;
+    delete cardModel;
 }
 
 void Player::initCards(const QList<PaperCard *>& cards)
 {
-    paperCards.append(cards);
+    cardModel->setData(cards);
     std::sort(paperCards.begin(), paperCards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
-    controller->getCardsWidget()->addCard(paperCards);
+    controller->getCardsView()->setModel(cardModel);
 }
 
 PaperCard* Player::drawsCard() {
     PaperCard* card = paperMahjong->getCard();
-    addOneCard(card);
+    card->setSelected(true);
+    addCardToModel(card);
     lastOperation = PO_MO;
     notifyStepCompleted();
     return card;
 }
 
-bool Player::removeCard(PaperCard* card)
+bool Player::discard()
 {
-    paperCards.removeOne(card);
-    lastOperation = PO_DA;
-    notifyStepCompleted();
-    return true;
+    QList<PaperCard *> cards = getSelectedCards();
+    if (cards.size() == 1) {
+        removeCardsFromModel(cards);
+        emit controller->updateDrawedArea(cards.first());
+        lastOperation = PO_DA;
+        notifyStepCompleted();
+        return true;
+    }
+    return false;
 }
 
-bool Player::eat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
+bool Player::eat(PaperCard* drawedCard)
 {
-    QList<PaperCard *> cards(myCards);
+    QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
     if (algorithm->is3Straight(cards)) {
-        for (PaperCard* card: myCards) {
-            paperCards.removeOne(card);
-        }
+        removeCardsFromModel(cards);
+        controller->moveToCardGroupArea(cards);
         lastOperation = PO_EAT;
         notifyStepCompleted();
         return true;
@@ -60,14 +69,13 @@ bool Player::eat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
     return false;
 }
 
-bool Player::doubleEat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
+bool Player::doubleEat(PaperCard* drawedCard)
 {
-    QList<PaperCard *> cards(myCards);
+    QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
     if (algorithm->is3Pairs(cards)) {
-        for (PaperCard* card: myCards) {
-            paperCards.removeOne(card);
-        }
+        removeCardsFromModel(cards);
+        controller->moveToCardGroupArea(cards);
         lastOperation = PO_PENG;
         notifyStepCompleted();
         return true;
@@ -75,13 +83,13 @@ bool Player::doubleEat(const QList<PaperCard *> &myCards, PaperCard* drawedCard)
     return false;
 }
 
-bool Player::singleEat(PaperCard* myCards, PaperCard* drawedCard)
+bool Player::singleEat(PaperCard* drawedCard)
 {
-    QList<PaperCard *> cards;
-    cards.push_back(myCards);
+    QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
     if (algorithm->is2Pairs(cards)) {
-        paperCards.removeOne(myCards);
+        removeCardsFromModel(cards);
+        controller->moveToCardGroupArea(cards);
         lastOperation = PO_DING;
         notifyStepCompleted();
         return true;
@@ -89,25 +97,28 @@ bool Player::singleEat(PaperCard* myCards, PaperCard* drawedCard)
     return false;
 }
 
-bool Player::makeHappyGroup(const QList<PaperCard* >& cards)
+bool Player::makeHappyGroup()
 {
+    QList<PaperCard *> cards = getSelectedCards();
     if (algorithm->isHappyGroup(cards)) {
+        removeCardsFromModel(cards);
         lastOperation = PO_LIAOXI;
+        controller->moveToCardGroupArea(cards);
         return true;
     }
     return false;
 }
 
-bool Player::attachHappyGroup(PaperCard *card)
+bool Player::attachHappyGroup()
 {
     return false;
 }
 
-bool Player::complete(PaperCard *card)
+bool Player::complete(PaperCard *drawedCard)
 {
     QList<PaperCard*> cards(paperCards);
-    if (card)
-        cards.push_back(card);
+    if (drawedCard)
+        cards.push_back(drawedCard);
     if (algorithm->isCompleteAHand(cards)){
         lastOperation = PO_HU;
         return true;
@@ -143,13 +154,6 @@ void Player::onMakeHappyGroup()
     controller->showBtnWidget(true);
 }
 
-void Player::addOneCard(PaperCard *card) {
-    auto itor = std::find_if(paperCards.begin(), paperCards.end(), [card](PaperCard* pc) {
-        return pc->getCardNumber() > card->getCardNumber();
-    });
-    paperCards.insert(itor - paperCards.begin(), card);
-}
-
 void Player::notifyStepCompleted()
 {
     controller->showBtnWidget(false);
@@ -159,6 +163,41 @@ void Player::notifyStepCompleted()
     else if (step == 2) {
         emit secondStepCompleted(lastOperation);
     }
+}
+
+QList<PaperCard *> Player::getSelectedCards()
+{
+    QList<PaperCard *> cards;
+    for (PaperCard* card: paperCards) {
+        if (card->isSelected()) {
+            cards.push_back(card);
+        }
+    }
+    return cards;
+}
+
+void Player::addCardToModel(PaperCard *card) {
+//    auto itor = std::find_if(paperCards.begin(), paperCards.end(), [card](PaperCard* pc) {
+//        return pc->getCardNumber() > card->getCardNumber();
+//    });
+//    paperCards.insert(itor - paperCards.begin(), card);
+    paperCards.push_back(card);
+    cardModel->update();
+}
+
+void Player::removeCardsFromModel(const QList<PaperCard *> &cards)
+{
+    bool updated = false;
+    for (PaperCard* card: cards) {
+        if (paperCards.contains(card)) {
+            paperCards.removeOne(card);
+            updated = true;
+        }
+    }
+    std::sort(paperCards.begin(), paperCards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
+
+    if (updated)
+        cardModel->update();
 }
 
 int Player::getStep() const

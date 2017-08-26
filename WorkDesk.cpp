@@ -1,5 +1,5 @@
 #include "WorkDesk.h"
-#include "CardsWidget.h"
+#include "CardView.h"
 #include "CardContainer.h"
 #include "HappyGroupWidget.h"
 #include "MahjongJudgment.h"
@@ -70,13 +70,6 @@ void WorkDesk::hideAllButtons()
     }
 }
 
-void WorkDesk::moveToCardGroupArea(QList<PaperCard *> cards)
-{
-    HappyGroupWidget* hg = new HappyGroupWidget();
-    hg->setCards(cards);
-    leftLayout->addWidget(hg);
-}
-
 void WorkDesk::onOperatBtnClicked()
 {
     if (player->getStep() == 2) {
@@ -85,53 +78,36 @@ void WorkDesk::onOperatBtnClicked()
     QPushButton* button = static_cast<QPushButton*>(sender());
     QString name = button->text();
     if (name == tr("liaoxi")) {
-        if (player->makeHappyGroup(cardsWidget->getSelectedCards())) {
-            moveToCardGroupArea(cardsWidget->takeSelectedCards());
-        }
-        else {
+        if (!player->makeHappyGroup()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Not a Hapyy Group."), QMessageBox::Ok, QMessageBox::Ok);
         }
+            //moveToCardGroupArea(cardView->takeSelectedCards());
     }
     else if (name == tr("mo")) {
-        PaperCard* card = player->drawsCard();
-        if (card) {
-            cardsWidget->addCard(card);
-        }
+        player->drawsCard();
     }
     else if (name == tr("da")) {
-        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
-        if (cards.size() == 1) {
-            if (player->removeCard(cards.first())) {
-                emit updateDrawedArea(cardsWidget->takeSelectedCards().first());
-            }
-        }
-        else {
+        if (!player->discard()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
         }
+//        emit updateDrawedArea(cardView->takeSelectedCards().first());
     }
     else if (name == tr("chi")) {
-        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
-        if (player->eat(cards , otherPlayersCard)){
-            cardsWidget->takeSelectedCards();
-            cards.push_back(otherPlayersCard);
-            moveToCardGroupArea(cards);
+        if (!player->eat(otherPlayersCard)){
+            QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
         }
+            //moveToCardGroupArea(cards);
     }
     else if (name == tr("peng")) {
-        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
-        if (player->doubleEat(cards, otherPlayersCard)){
-            cardsWidget->takeSelectedCards();
-            cards.push_back(otherPlayersCard);
-            moveToCardGroupArea(cards);
+        if (!player->doubleEat(otherPlayersCard)){
+            QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }
     else if (name == tr("ding")) {
-        QList<PaperCard *> cards = cardsWidget->getSelectedCards();
-        if (player->singleEat(cards.first(), otherPlayersCard)){
-            cardsWidget->takeSelectedCards();
-            cards.push_back(otherPlayersCard);
-            moveToCardGroupArea(cards);
+        if (!player->singleEat(otherPlayersCard)){
+            QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
         }
+            //moveToCardGroupArea(cards);
     }
     else if (name == tr("hu")) {
         if (player->complete(otherPlayersCard)){
@@ -139,7 +115,7 @@ void WorkDesk::onOperatBtnClicked()
         }
     }
     else if (name == tr("guoxi")) {
-        player->attachHappyGroup(cardsWidget->getSelectedCards().first());
+        player->attachHappyGroup();
     }
     else if (name == tr("ok")) {
         player->makeHappyGroupOk();

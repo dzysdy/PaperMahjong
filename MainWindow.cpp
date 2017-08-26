@@ -3,7 +3,7 @@
 #include "MahjongJudgment.h"
 #include "PaperMahjong.h"
 #include "PaperCard.h"
-#include "CardsWidget.h"
+#include "CardView.h"
 #include "CardContainer.h"
 #include "HappyGroupWidget.h"
 #include "Controller.h"

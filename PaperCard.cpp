@@ -4,7 +4,8 @@
 
 PaperCard::PaperCard(unsigned number, QObject *parent) :
     QObject(parent),
-    cardNumber(number)
+    cardNumber(number),
+    selected(false)
 {
     setNameByNumber(number);
 }
@@ -46,4 +47,14 @@ void PaperCard::setNameByNumber(unsigned number)
             break;
         }
     }
+}
+
+bool PaperCard::isSelected() const
+{
+    return selected;
+}
+
+void PaperCard::setSelected(bool value)
+{
+    selected = value;
 }

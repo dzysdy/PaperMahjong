@@ -11,7 +11,7 @@
 #include "Player.h"
 
 class CardContainer;
-class CardsWidget;
+class CardView;
 class MahjongJudgment;
 
 class Controller : public QObject
@@ -21,8 +21,9 @@ public:
     explicit Controller(Player* p, QObject *parent = 0);
 
     QWidget* widget();
-    CardsWidget *getCardsWidget() const;
+    CardView *getCardsView() const;
     void connectSignals(MahjongJudgment* judgment);
+    void moveToCardGroupArea(QList<PaperCard *> cards);
     virtual void showBtnWidget(bool){}
 
 signals:
@@ -49,7 +50,7 @@ protected:
 
     QHBoxLayout* btnsLayout;
     QHBoxLayout* cardsLayout;
-    CardsWidget* cardsWidget;
+    CardView* cardView;
 
     QLCDNumber* timeRecoder;
     PaperCard* otherPlayersCard;

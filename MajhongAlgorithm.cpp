@@ -51,7 +51,7 @@ bool MajhongAlgorithm::isCompleteAHand(vector<unsigned> nums) {
 bool MajhongAlgorithm::take2Pairs(vector<unsigned>& nums, unsigned& index) {
     if (index > 0) {
         unsigned num = nums[index-1];
-        while (nums[index] == num)
+        while (nums[index] == num)//index range.  to be fixed
             index++;
     }
 

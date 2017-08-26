@@ -1,5 +1,5 @@
 #include "Controller.h"
-#include "CardsWidget.h"
+#include "CardView.h"
 #include "CardContainer.h"
 #include "HappyGroupWidget.h"
 #include "MahjongJudgment.h"
@@ -25,10 +25,10 @@ Controller::Controller(Player *p, QObject *parent) :
     mainLayout->addLayout(midLayout, 17);
     btnsLayout = new QHBoxLayout();
     cardsLayout = new QHBoxLayout();
-    cardsWidget = new CardsWidget();
-    cardsWidget->initail(17);
-    cardsWidget->setMinimumWidth(400);
-    cardsLayout->addWidget(cardsWidget);
+    cardView = new CardView();
+    cardView->initail(17);
+    cardView->setMinimumWidth(400);
+    cardsLayout->addWidget(cardView);
     cardsLayout->addStretch(1);
     midLayout->addLayout(btnsLayout);
     midLayout->addLayout(cardsLayout);
@@ -44,9 +44,9 @@ QWidget *Controller::widget()
     return desk;
 }
 
-CardsWidget *Controller::getCardsWidget() const
+CardView *Controller::getCardsView() const
 {
-    return cardsWidget;
+    return cardView;
 }
 
 void Controller::connectSignals(MahjongJudgment* judgment)
@@ -64,7 +64,6 @@ void Controller::onUpdateTime(unsigned sec)
 
 void Controller::onMakeHappyGroup()
 {
-    cardsWidget->setMode(CardsWidget::CSM_LIAOXI);
     hideAllButtons();
     QList<PlayerOperation> operations;
     operations.push_back(PO_LIAOXI);
@@ -74,17 +73,22 @@ void Controller::onMakeHappyGroup()
 
 void Controller::onFirstStep(QList<PlayerOperation> operations)
 {
-    cardsWidget->setMode(CardsWidget::CSM_CHI);
     showButtonsOnly(operations);
 }
 
 void Controller::onSecondStep(QList<PlayerOperation> operations)
 {
-    cardsWidget->setMode(CardsWidget::CSM_CUSTOM);
     showButtonsOnly(operations);
 }
 
 void Controller::onUpdatedDrawedCard(PaperCard *card)
 {
     otherPlayersCard = card;
+}
+
+void Controller::moveToCardGroupArea(QList<PaperCard *> cards)
+{
+    HappyGroupWidget* hg = new HappyGroupWidget();
+    hg->setCards(cards);
+    leftLayout->addWidget(hg);
 }

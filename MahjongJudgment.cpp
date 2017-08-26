@@ -1,5 +1,6 @@
 #include "MahjongJudgment.h"
 #include "PaperMahjong.h"
+#include "PaperCard.h"
 
 #define BEFORE_DRAWSCARD_TIME 30
 #define AFTER_DRAWSCARD_TIME 60
@@ -142,8 +143,9 @@ void MahjongJudgment::enforce()
     switch (currentStep) {
     case OS_HAPPYGROUP:
         for (Player* p: players) {
-            if (p->cards().size()%3 == 2)
-                p->removeCard(p->cards().first());
+            if (p->cards().size()%3 == 2) {
+                enforceDiscard(p);
+            }
             p->makeHappyGroupOk();
         }
         break;
@@ -151,11 +153,20 @@ void MahjongJudgment::enforce()
         player->drawsCard();
         break;
     case OS_SECONDSTEP:
-        player->removeCard(player->cards().first());
+        enforceDiscard(player);
         break;
     default:
         break;
     }
+}
+
+void MahjongJudgment::enforceDiscard(Player *player)
+{
+    for (PaperCard* c: player->cards()){
+        c->setSelected(false);
+    }
+    player->cards().first()->setSelected(true);
+    player->discard();
 }
 
 void MahjongJudgment::calcOperatrion(PlayerOperation lastOperation, QList<PlayerOperation>& operations)
