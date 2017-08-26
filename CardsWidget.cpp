@@ -5,6 +5,61 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
+class CardModel: public QObject {
+    Q_OBJECT
+
+public:
+    CardModel(QObject* parent = nullptr);
+
+    void update() {
+        emit updated();
+    }
+
+    QList<PaperCard*> data() {
+        return cards;
+    }
+
+    void setData(const QList<PaperCard*>& data) {
+        cards = data;
+    }
+
+signals:
+    void updated();
+
+    QList<PaperCard*> cards;
+};
+
+class CardView: public QObject {
+    Q_OBJECT
+
+public:
+    CardView(QObject* parent = nullptr);
+
+    void setModel(CardModel* model) {
+        this->model = model;
+        connect(model, &CardModel::updated, this, &CardView::onUpdated);
+    }
+
+    void update() {
+        showData(model->data());
+    }
+
+private slots:
+    void onUpdated() {
+        update();
+    }
+
+private:
+    void showData(QList<PaperCard*> data) {
+        //
+    }
+
+    CardModel* model;
+};
+
+
+
+
 CardsWidget::CardsWidget(QWidget *parent) :
     QWidget(parent),
     layout(nullptr)
@@ -27,12 +82,10 @@ void CardsWidget::initail(unsigned num)
 
 void CardsWidget::addCard(PaperCard *card)
 {
-    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
     if (cardContainers.size() - cardsNum > 0) {
         CardContainer* cardContainer = cardContainers[cardsNum++];
         cardContainer->setCard(card);
     }
-    qDebug()<<this<<__func__<<__LINE__<<cardContainers.size() << cardsNum ;
 }
 
 void CardsWidget::addCard(const QList<PaperCard *> cards)
