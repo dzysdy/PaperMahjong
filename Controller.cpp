@@ -37,6 +37,7 @@ Controller::Controller(Player *p, QObject *parent) :
     mainLayout->addLayout(rightLayout);
     timeRecoder = new QLCDNumber();
     rightLayout->addWidget(timeRecoder);
+    isMyTurn = false;
 }
 
 QWidget *Controller::widget()
@@ -51,10 +52,10 @@ CardView *Controller::getCardsView() const
 
 void Controller::connectSignals(MahjongJudgment* judgment)
 {
-    connect(judgment, &MahjongJudgment::updateTime, this, &Controller::onUpdateTime);
     connect(judgment, &MahjongJudgment::makeHappyGroup, this, &Controller::onMakeHappyGroup);
-    connect(judgment, &MahjongJudgment::firstStep, this, &Controller::onFirstStep);
-    connect(judgment, &MahjongJudgment::secondStep, this, &Controller::onSecondStep);
+//    connect(judgment, &MahjongJudgment::updateTime, this, &Controller::onUpdateTime);
+//    connect(judgment, &MahjongJudgment::firstStep, this, &Controller::onFirstStep);
+//    connect(judgment, &MahjongJudgment::secondStep, this, &Controller::onSecondStep);
 }
 
 void Controller::onUpdateTime(unsigned sec)
@@ -64,21 +65,20 @@ void Controller::onUpdateTime(unsigned sec)
 
 void Controller::onMakeHappyGroup()
 {
-    hideAllButtons();
     QList<PlayerOperation> operations;
     operations.push_back(PO_LIAOXI);
     operations.push_back(PO_OK);
-    showButtonsOnly(operations);
+    handleOperations(operations);
 }
 
 void Controller::onFirstStep(QList<PlayerOperation> operations)
 {
-    showButtonsOnly(operations);
+    handleOperations(operations);
 }
 
 void Controller::onSecondStep(QList<PlayerOperation> operations)
 {
-    showButtonsOnly(operations);
+    handleOperations(operations);
 }
 
 void Controller::onUpdatedDrawedCard(PaperCard *card)
@@ -91,4 +91,9 @@ void Controller::moveToCardGroupArea(QList<PaperCard *> cards)
     HappyGroupWidget* hg = new HappyGroupWidget();
     hg->setCards(cards);
     leftLayout->addWidget(hg);
+}
+
+void Controller::setMyTurn(bool b)
+{
+    isMyTurn = b;
 }

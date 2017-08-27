@@ -7,13 +7,14 @@
 #include "AIController.h"
 #include "CardView.h"
 #include "CardModel.h"
+#include "ControllerFactory.h"
 #include <algorithm>
 
-Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, QObject *parent) :
+Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, int controllerType, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
     algorithm(MajhongAlgorithmWraper::instance()),
-    controller(new WorkDesk(this)),
+    controller(ControllerFactory::createController((ControllerType)controllerType, this)),
     cardModel(new CardModel()),
     paperCards(cardModel->cards)
 {
@@ -101,9 +102,9 @@ bool Player::makeHappyGroup()
 {
     QList<PaperCard *> cards = getSelectedCards();
     if (algorithm->isHappyGroup(cards)) {
+        controller->moveToCardGroupArea(cards);
         removeCardsFromModel(cards);
         lastOperation = PO_LIAOXI;
-        controller->moveToCardGroupArea(cards);
         return true;
     }
     return false;
@@ -128,19 +129,19 @@ bool Player::complete(PaperCard *drawedCard)
 
 void Player::makeHappyGroupOk()
 {
-    controller->showBtnWidget(false);
+    controller->setMyTurn(false);
     emit makedHappyGroup();
 }
 
 void Player::doFirstStep(int /*operation*/)
 {
-    controller->showBtnWidget(true);
+    controller->setMyTurn(true);
     step = 1;
 }
 
 void Player::doSecondStep(int /*operation*/)
 {
-    controller->showBtnWidget(true);
+    controller->setMyTurn(true);
     step = 2;
 }
 
@@ -151,12 +152,12 @@ QWidget *Player::desk()
 
 void Player::onMakeHappyGroup()
 {
-    controller->showBtnWidget(true);
+    controller->setMyTurn(true);
 }
 
 void Player::notifyStepCompleted()
 {
-    controller->showBtnWidget(false);
+    controller->setMyTurn(false);
     if (step == 1) {
         emit firstStepCompleted(lastOperation);
     }

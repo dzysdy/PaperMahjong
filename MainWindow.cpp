@@ -38,8 +38,8 @@ void MainWindow::initail()
 {
     mahjong = new PaperMahjong();
     judgment = new MahjongJudgment(mahjong);
-    player1 = new Player(mahjong, judgment);
-    player2 = new Player(mahjong, judgment);
+    player1 = new Player(mahjong, judgment, 0);
+    player2 = new Player(mahjong, judgment, 1);
     judgment->addPlayer(player1);
     judgment->addPlayer(player2);
     ui->downLayout->addWidget(player1->desk());

@@ -1,6 +1,7 @@
 #include "MahjongJudgment.h"
 #include "PaperMahjong.h"
 #include "PaperCard.h"
+#include "Controller.h"
 
 #define BEFORE_DRAWSCARD_TIME 30
 #define AFTER_DRAWSCARD_TIME 60
@@ -75,6 +76,21 @@ void MahjongJudgment::onMakedHappyGroup()
         doSecondStep(PO_NONE);
 }
 
+void MahjongJudgment::onUpdateTime(unsigned sec)
+{
+    currentPlayer()->getController()->onUpdateTime(sec);
+}
+
+void MahjongJudgment::onFirstStep(QList<PlayerOperation> operations)
+{
+    currentPlayer()->getController()->onFirstStep(operations);
+}
+
+void MahjongJudgment::onSecondStep(QList<PlayerOperation> operations)
+{
+    currentPlayer()->getController()->onSecondStep(operations);
+}
+
 void MahjongJudgment::playersDrawsCards()
 {
     bool first = true;
@@ -89,11 +105,13 @@ void MahjongJudgment::playersDrawsCards()
 void MahjongJudgment::connectSignals(Player *player)
 {
     connect(this, &MahjongJudgment::makeHappyGroup, player, &Player::onMakeHappyGroup);
-//    connect(this, &MahjongJudgment::firstStep, player, &Player::onFirstStep);
-//    connect(this, &MahjongJudgment::secondStep, player, &Player::onSecondStep);
     connect(player, &Player::firstStepCompleted, this, &MahjongJudgment::onFirstStepCompleted);
     connect(player, &Player::secondStepCompleted, this, &MahjongJudgment::onSecondStepCompleted);
     connect(player, &Player::makedHappyGroup, this, &MahjongJudgment::onMakedHappyGroup);
+
+    connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);
+    connect(this, &MahjongJudgment::firstStep, this, &MahjongJudgment::onFirstStep);
+    connect(this, &MahjongJudgment::secondStep, this, &MahjongJudgment::onSecondStep);
 }
 
 void MahjongJudgment::changeTurn()

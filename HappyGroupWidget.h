@@ -2,8 +2,10 @@
 #define HAPPYGROUPWIDGET_H
 
 #include <QWidget>
+#include <array>
 
 class PaperCard;
+class CardContainer;
 class HappyGroupWidget : public QWidget
 {
     Q_OBJECT
@@ -14,6 +16,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    std::array<CardContainer*, 3> containers;
 };
 
 #endif // HAPPYGROUPWIDGET_H

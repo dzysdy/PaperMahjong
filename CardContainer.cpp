@@ -59,7 +59,6 @@ void CardContainer::updateView()
     else {
         this->move(x(), y() + 20);
     }
-    qDebug()<<__func__<<selected<<y();
     if (paperCard)
         paperCard->setSelected(selected);
 }

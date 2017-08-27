@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     Controller.cpp \
     AIController.cpp \
     CardView.cpp \
-    CardModel.cpp
+    CardModel.cpp \
+    ControllerFactory.cpp
 
 HEADERS  += MainWindow.h \
     PaperMahjong.h \
@@ -56,6 +57,7 @@ HEADERS  += MainWindow.h \
     Controller.h \
     AIController.h \
     CardView.h \
-    CardModel.h
+    CardModel.h \
+    ControllerFactory.h
 
 FORMS    += mainwindow.ui

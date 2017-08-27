@@ -19,6 +19,9 @@ public:
     bool isHappyGroup(const QList<PaperCard*>& cards);
     bool isCompleteAHand(const QList<PaperCard*>& cards);
 
+    int calcCurrentScore(const QList<PaperCard*>& cards);
+    QList<QList<PaperCard*>> scanHappyGroups(QList<PaperCard*> cards);
+
 private:
     MajhongAlgorithmWraper();
     vector<unsigned> cards2Numbers(const QList<PaperCard*>& cards);

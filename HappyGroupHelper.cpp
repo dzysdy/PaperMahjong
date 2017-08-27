@@ -10,13 +10,24 @@
 bool HappyGroupHelper::isInitialed = false;
 QList<HappyGroupHelper::HappyGroup> HappyGroupHelper::happyGroups;
 
-bool HappyGroupHelper::isAHappGroup(std::vector<unsigned> numbers) {
+bool HappyGroupHelper::isAHappyGroup(std::vector<unsigned> numbers) {
     assert(isInitialed);
     HappyGroup group;
     for (unsigned number: numbers) {
         group.addNumber(number);
     }
     return happyGroups.contains(group);
+}
+
+unsigned HappyGroupHelper::getHappyGroupNum()
+{
+    return happyGroups.size();
+}
+
+std::set<unsigned> HappyGroupHelper::getHappyGroup(unsigned index)
+{
+    HappyGroup happyGroup = happyGroups[index];
+    return happyGroup.numbers;
 }
 
 void HappyGroupHelper::initial()

@@ -24,7 +24,7 @@ WorkDesk::WorkDesk(Player *p, QObject *parent):
     initailButtons();
 }
 
-void WorkDesk::showBtnWidget(bool show)
+void WorkDesk::setMyTurn(bool show)
 {
     showBtn = show;
     if (!showBtn)
@@ -57,7 +57,7 @@ void WorkDesk::showButtons(QList<PlayerOperation> operations)
     }
 }
 
-void WorkDesk::showButtonsOnly(QList<PlayerOperation> operations)
+void WorkDesk::handleOperations(QList<PlayerOperation> operations)
 {
     hideAllButtons();
     showButtons(operations);
@@ -81,7 +81,6 @@ void WorkDesk::onOperatBtnClicked()
         if (!player->makeHappyGroup()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Not a Hapyy Group."), QMessageBox::Ok, QMessageBox::Ok);
         }
-            //moveToCardGroupArea(cardView->takeSelectedCards());
     }
     else if (name == tr("mo")) {
         player->drawsCard();
@@ -90,13 +89,11 @@ void WorkDesk::onOperatBtnClicked()
         if (!player->discard()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
         }
-//        emit updateDrawedArea(cardView->takeSelectedCards().first());
     }
     else if (name == tr("chi")) {
         if (!player->eat(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
         }
-            //moveToCardGroupArea(cards);
     }
     else if (name == tr("peng")) {
         if (!player->doubleEat(otherPlayersCard)){
@@ -107,7 +104,6 @@ void WorkDesk::onOperatBtnClicked()
         if (!player->singleEat(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
         }
-            //moveToCardGroupArea(cards);
     }
     else if (name == tr("hu")) {
         if (player->complete(otherPlayersCard)){

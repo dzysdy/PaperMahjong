@@ -9,7 +9,7 @@ MajhongAlgorithm::MajhongAlgorithm()
 bool MajhongAlgorithm::is3Straight(vector<unsigned> nums) {
     if (nums.size() != 3)
         return false;
-    std::sort(nums.begin(), nums.end());
+    sort(nums.begin(), nums.end());
     return nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2];
 }
 
@@ -27,25 +27,34 @@ bool MajhongAlgorithm::is3Pairs(const vector<unsigned> &nums) {
 }
 
 bool MajhongAlgorithm::isHappyGroup(vector<unsigned> nums) {
-    return HappyGroupHelper::isAHappGroup(nums);
+    return HappyGroupHelper::isAHappyGroup(nums);
 }
 
 bool MajhongAlgorithm::isCompleteAHand(vector<unsigned> nums) {
     unsigned size = nums.size();
     if (size%3 == 0) {
-        std::sort(nums.begin(), nums.end());
+        sort(nums.begin(), nums.end());
         return isAllStraightOrPairs(nums);
     }
     else if (size%3 == 2) {
-        std::sort(nums.begin(), nums.end());
+        sort(nums.begin(), nums.end());
         unsigned index = 0;
-        bool h = true;
-        h = isCompleted(nums, index);
-        return h;
+        return isCompleted(nums, index);
     }
     else {
         return false;
     }
+}
+
+vector<vector<unsigned>> MajhongAlgorithm::scanHappyGroups(const vector<unsigned>& nums)
+{
+    vector<vector<unsigned>> allGroups;
+    unsigned count = HappyGroupHelper::getHappyGroupNum();
+    for (unsigned i = 0; i < count; ++i) {
+        set<unsigned> happyGroup = HappyGroupHelper::getHappyGroup(i);
+        scanHappyGroup(nums, happyGroup, allGroups);
+    }
+    return allGroups;
 }
 
 bool MajhongAlgorithm::take2Pairs(vector<unsigned>& nums, unsigned& index) {
@@ -76,7 +85,7 @@ bool MajhongAlgorithm::take3Pairs(vector<unsigned>& nums) {
 
 bool MajhongAlgorithm::take3Straight(vector<unsigned>& nums) {
     if (nums.empty()) return true;
-    if (nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2]) {
+    if (nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2]) { //here is wrong, case  1 2 2 3
         nums.erase(nums.begin(), nums.begin() + 3);
         return true;
     }
@@ -100,4 +109,22 @@ bool MajhongAlgorithm::isCompleted(vector<unsigned>& nums, unsigned& index) {
             nums = numsCopy;
     }
     return false;
+}
+
+void MajhongAlgorithm::scanHappyGroup(const vector<unsigned>& nums, const set<unsigned>& happyGroup, vector<vector<unsigned>>& groups)
+{
+    vector<unsigned> group;
+    auto finded = nums.begin();
+    for (unsigned hGNum: happyGroup) {
+        finded = std::find(finded + 1, nums.end(), hGNum);
+        if (finded != nums.end()) {
+            group.push_back(finded - nums.begin());
+        }
+        else {
+            break;
+        }
+    }
+    if (group.size() == happyGroup.size()) {
+        groups.push_back(group);
+    }
 }

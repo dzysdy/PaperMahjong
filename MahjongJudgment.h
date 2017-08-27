@@ -28,16 +28,21 @@ public:
     bool canComplete();
 
 signals:
+    void makeHappyGroup();
+
     void updateTime(unsigned sec);
     void firstStep(QList<PlayerOperation> operations);
     void secondStep(QList<PlayerOperation> operations);
-    void makeHappyGroup();
 
 public slots:
     void onTimer();
     void onFirstStepCompleted(PlayerOperation operation);
     void onSecondStepCompleted(PlayerOperation operation);
     void onMakedHappyGroup();
+
+    void onUpdateTime(unsigned sec);
+    void onFirstStep(QList<PlayerOperation> operations);
+    void onSecondStep(QList<PlayerOperation> operations);
 
 private:
     void playersDrawsCards();

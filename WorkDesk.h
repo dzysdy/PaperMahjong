@@ -7,7 +7,8 @@ class WorkDesk : public Controller
 public:
     WorkDesk(Player* p, QObject *parent = 0);
 
-    virtual void showBtnWidget(bool show);
+    virtual void setMyTurn(bool show);
+    virtual void handleOperations(QList<PlayerOperation> operations);
 
 public slots:
     void onOperatBtnClicked();
@@ -15,7 +16,6 @@ public slots:
 private:
     void initailButtons();
     void showButtons(QList<PlayerOperation> operations);
-    void showButtonsOnly(QList<PlayerOperation> operations);
     void hideAllButtons();
     void moveToCardGroupArea(QList<PaperCard *> cards);
 

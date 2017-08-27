@@ -11,7 +11,9 @@ public:
     HappyGroupHelper() = delete;
 
     static void initial();
-    static bool isAHappGroup(std::vector<unsigned> numbers);
+    static bool isAHappyGroup(std::vector<unsigned> numbers);
+    static unsigned getHappyGroupNum();
+    static std::set<unsigned> getHappyGroup(unsigned index);
 
 private:
     class HappyGroup {
@@ -28,7 +30,6 @@ private:
             return std::equal(numbers.begin(), numbers.end(), that.numbers.begin());
         }
 
-    private:
         std::set<unsigned> numbers;
     };
 
