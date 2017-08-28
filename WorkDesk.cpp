@@ -36,7 +36,7 @@ void WorkDesk::initailButtons()
     showBtn = true;
     btnsLayout->addStretch(1);
     for (int i = 0; i < BUTTON_NUM; i++) {
-        QString name = gButtons[i];
+        QString name = tr(gButtons[i].toStdString().c_str());
         QPushButton* button = new QPushButton(name);
         button->setMinimumWidth(30);
         btnsLayout->addWidget(button);
@@ -52,7 +52,7 @@ void WorkDesk::showButtons(QList<PlayerOperation> operations)
     if (!showBtn)
         return;
     for (PlayerOperation operation : operations) {
-        QString name = gButtons[operation - 1];
+        QString name = tr(gButtons[operation - 1].toStdString().c_str());
         buttons[name]->show();
     }
 }

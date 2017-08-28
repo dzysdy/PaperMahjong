@@ -4,6 +4,7 @@
 
 class WorkDesk : public Controller
 {
+    Q_OBJECT
 public:
     WorkDesk(Player* p, QObject *parent = 0);
 
