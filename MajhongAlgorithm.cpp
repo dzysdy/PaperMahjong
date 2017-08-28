@@ -1,5 +1,6 @@
 #include "MajhongAlgorithm.h"
 #include "HappyGroupHelper.h"
+#include <algorithm>
 
 MajhongAlgorithm::MajhongAlgorithm()
 {
@@ -9,7 +10,7 @@ MajhongAlgorithm::MajhongAlgorithm()
 bool MajhongAlgorithm::is3Straight(vector<unsigned> nums) {
     if (nums.size() != 3)
         return false;
-    sort(nums.begin(), nums.end());
+    std::sort(nums.begin(), nums.end());
     return nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2];
 }
 
@@ -57,6 +58,12 @@ vector<vector<unsigned>> MajhongAlgorithm::scanHappyGroups(const vector<unsigned
     return allGroups;
 }
 
+int MajhongAlgorithm::calcScore(vector<unsigned> nums)
+{
+    std::sort(nums.begin(), nums.end());
+    return 0;
+}
+
 bool MajhongAlgorithm::take2Pairs(vector<unsigned>& nums, unsigned& index) {
     if (index > 0) {
         unsigned num = nums[index-1];
@@ -85,9 +92,21 @@ bool MajhongAlgorithm::take3Pairs(vector<unsigned>& nums) {
 
 bool MajhongAlgorithm::take3Straight(vector<unsigned>& nums) {
     if (nums.empty()) return true;
-    if (nums[0] + 1 == nums[1] && nums[1] + 1 == nums[2]) { //here is wrong, case  1 2 2 3
-        nums.erase(nums.begin(), nums.begin() + 3);
-        return true;
+    vector<unsigned> indexs{0};
+    for (unsigned i = 1; i < nums.size(); i++) {
+        unsigned num = nums[indexs.back()] + 1;
+        if (num < nums[i]) {
+            break;
+        }
+        else if (num == nums[i]) {
+            indexs.push_back(i);
+            if (indexs.size() == 3) {
+                nums.erase(nums.begin() + indexs[2]);
+                nums.erase(nums.begin() + indexs[1]);
+                nums.erase(nums.begin() + indexs[0]);
+                return true;
+            }
+        }
     }
     return false;
 }
