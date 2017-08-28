@@ -13,10 +13,10 @@
 Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, int controllerType, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
-    algorithm(MajhongAlgorithmWraper::instance()),
     controller(ControllerFactory::createController((ControllerType)controllerType, this)),
     cardModel(new CardModel()),
-    paperCards(cardModel->cards)
+    paperCards(cardModel->cards),
+    algorithm(MajhongAlgorithmWraper::instance())
 {
     controller->connectSignals(judgment);
 }

@@ -12,7 +12,7 @@ class CardView: public QWidget {
     Q_OBJECT
 
 public:
-    CardView(QObject* parent = nullptr);
+    CardView(QWidget* parent = nullptr);
 
     void initail(unsigned num);
     void setModel(CardModel* cardModel);

@@ -8,7 +8,7 @@
 HappyGroupWidget::HappyGroupWidget(QWidget *parent) :
     QWidget(parent)
 {
-    for (int i = 0; i < containers.size(); i++) {
+    for (unsigned i = 0; i < containers.size(); i++) {
         CardContainer* container = new CardContainer();
         container->setParent(this);
         container->move(0, 0 + i*container->height()*0.15);

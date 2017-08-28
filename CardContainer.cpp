@@ -29,7 +29,7 @@ void CardContainer::setImage(const QImage &image)
 
 void CardContainer::setSelected(bool b)
 {
-    if (selected != b) {
+    if (selected != b && paperCard) {
         selected = b;
         updateView();
     }
@@ -59,8 +59,7 @@ void CardContainer::updateView()
     else {
         this->move(x(), y() + 20);
     }
-    if (paperCard)
-        paperCard->setSelected(selected);
+    paperCard->setSelected(selected);
 }
 
 void CardContainer::mousePressEvent(QMouseEvent *)

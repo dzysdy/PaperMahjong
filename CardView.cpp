@@ -6,7 +6,8 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
-CardView::CardView(QObject *parent):
+CardView::CardView(QWidget *parent):
+    QWidget(parent),
     model(nullptr),
     layout(nullptr)
 {
@@ -47,7 +48,7 @@ void CardView::onCardClicked()
 
 void CardView::showData(QList<PaperCard *> data)
 {
-    for (unsigned i = 0; i < cardContainers.size(); i++) {
+    for (int i = 0; i < cardContainers.size(); i++) {
         PaperCard* card = cardContainers[i]->getPaperCard();
         if (i < data.size()) {
             PaperCard* newCard = data[i];

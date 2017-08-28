@@ -72,7 +72,7 @@ void MahjongJudgment::onMakedHappyGroup()
 {
     lastStep = OS_HAPPYGROUP;
     isTimeRecording = false;
-    if (++playerCompletedNums == players.size())
+    if (++playerCompletedNums == (unsigned)players.size())
         doSecondStep(PO_NONE);
 }
 
