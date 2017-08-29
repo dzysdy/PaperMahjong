@@ -3,6 +3,19 @@
 #include "PaperCard.h"
 #include <QDebug>
 
+const QString gButtons[] = {
+    "none",
+    QObject::tr("chi"),
+    QObject::tr("peng"),
+    QObject::tr("ding"),
+    QObject::tr("hu"),
+    QObject::tr("da"),
+    QObject::tr("mo"),
+    QObject::tr("liaoxi"),
+    QObject::tr("guoxi"),
+    QObject::tr("ok")
+};
+
 AIController::AIController(Player *p, QObject *parent):
     Controller(p, parent),
     algorithm(MajhongAlgorithmWraper::instance())
@@ -17,9 +30,9 @@ void AIController::setMyTurn(bool b)
 
 void AIController::handleOperations(QList<PlayerOperation> operations)
 {
-    printf("%s",__func__);
+    printf("%s: %d step: ",__func__,player->getStep());
     for (PlayerOperation o: operations) {
-        printf(",%d", (int)o);
+        printf(",%s", gButtons[(int)o].toStdString().c_str());
     }
     printf("\n\n");
     fflush(stdout);
@@ -31,12 +44,32 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
         }
         player->makeHappyGroupOk();
     }
+    else {
+        if (player->complete(otherPlayersCard)) {
+            //emit to judgment;
+            return;
+        }
+        operations.removeOne(PO_HU);
+        int currentScore = algorithm->calcCurrentScore(player->cards());
+        PlayerOperation highScoreOperation;
+        for (PlayerOperation operation: operations) {
+            int score = calcOperationScore(operation);
+            if (score > currentScore) {
+                highScoreOperation = operation;
+            }
+        }
+        doOperation(highScoreOperation);
+    }
+
     else if (operations.contains(PO_MO)) {
         player->drawsCard();
         //QList<QList<PaperCard *> > results = scanStraight(player->cards(), otherPlayersCard);
         //otherPlayersCard
     }
     else if  (operations.contains(PO_DA)) {
+        PaperCard* card = algorithm->scanDiscard(player->cards());
+        QList<PaperCard *> result{card};
+        selectCardsOnly(result);
         player->discard();
     }
 }
@@ -45,5 +78,45 @@ void AIController::selectCardsOnly(const QList<PaperCard *> cards)
 {
     for (PaperCard* card: player->cards()) {
         card->setSelected(cards.contains(card));
+    }
+}
+
+int AIController::calcOperationScore(PlayerOperation operation)
+{
+
+}
+
+void AIController::doOperation(PlayerOperation operation)
+{
+    switch (operation) {
+    case PO_EAT:
+
+        break;
+    case PO_PENG:
+
+        break;
+    case PO_DING:
+
+        break;
+    case PO_HU:
+
+        break;
+    case PO_DA:
+
+        break;
+    case PO_MO:
+
+        break;
+    case PO_LIAOXI:
+
+        break;
+    case PO_GUOXI:
+
+        break;
+    case PO_OK:
+
+        break;
+    default:
+        break;
     }
 }

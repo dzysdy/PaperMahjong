@@ -13,6 +13,8 @@ protected:
 
 private:
     void selectCardsOnly(const QList<PaperCard *> cards);
+    int calcOperationScore(PlayerOperation operation);
+    void doOperation(PlayerOperation operation);
 
     MajhongAlgorithmWraper* algorithm;
 };

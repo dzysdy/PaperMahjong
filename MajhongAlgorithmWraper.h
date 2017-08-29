@@ -21,6 +21,7 @@ public:
 
     int calcCurrentScore(const QList<PaperCard*>& cards);
     QList<QList<PaperCard*>> scanHappyGroups(QList<PaperCard*> cards);
+    PaperCard* scanDiscard(QList<PaperCard*> cards);
 
 private:
     MajhongAlgorithmWraper();

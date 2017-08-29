@@ -56,6 +56,11 @@ QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanHappyGroups(QList<PaperCa
     return results;
 }
 
+PaperCard *MajhongAlgorithmWraper::scanDiscard(QList<PaperCard *> cards)
+{
+    return cards.first();
+}
+
 vector<unsigned> MajhongAlgorithmWraper::cards2Numbers(const QList<PaperCard *> &cards)
 {
     vector<unsigned> nums;
