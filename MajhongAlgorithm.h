@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <set>
-#include <algorithm>
 
 using std::vector;
 using std::set;
@@ -19,6 +18,8 @@ public:
     bool isHappyGroup(vector<unsigned> nums);
     bool isCompleteAHand(vector<unsigned> nums);
     vector<vector<unsigned>> scanHappyGroups(const vector<unsigned> &nums);
+    //scanStraight(vector<unsigned> nums);
+    int calcScore(vector<unsigned> nums);
 
 private:
     bool take2Pairs(vector<unsigned> &nums, unsigned &index);

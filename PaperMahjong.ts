@@ -97,7 +97,8 @@
     <message>
         <location filename="WorkDesk.cpp" line="82"/>
         <source>Not a Hapyy Group.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>不能组成喜儿。</translatorcomment>
+        <translation>不是喜儿。</translation>
     </message>
     <message>
         <location filename="WorkDesk.cpp" line="90"/>
@@ -115,7 +116,8 @@
         <location filename="WorkDesk.cpp" line="95"/>
         <location filename="WorkDesk.cpp" line="100"/>
         <source>Please select two cards first.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>请先选择两张牌。</translatorcomment>
+        <translation>请先选择两张牌。</translation>
     </message>
     <message>
         <location filename="WorkDesk.cpp" line="98"/>
