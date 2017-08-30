@@ -61,7 +61,7 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
         doOperation(highScoreOperation);
     }
 
-    else if (operations.contains(PO_MO)) {
+    if (operations.contains(PO_MO)) {
         player->drawsCard();
         //QList<QList<PaperCard *> > results = scanStraight(player->cards(), otherPlayersCard);
         //otherPlayersCard
@@ -83,7 +83,7 @@ void AIController::selectCardsOnly(const QList<PaperCard *> cards)
 
 int AIController::calcOperationScore(PlayerOperation operation)
 {
-
+    return 1;
 }
 
 void AIController::doOperation(PlayerOperation operation)

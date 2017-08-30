@@ -18,7 +18,7 @@ public:
     bool isHappyGroup(vector<unsigned> nums);
     bool isCompleteAHand(vector<unsigned> nums);
     vector<vector<unsigned>> scanHappyGroups(const vector<unsigned> &nums);
-    //scanStraight(vector<unsigned> nums);
+    vector<vector<unsigned>> scanStraight(vector<unsigned> nums, unsigned targetNumber);
     int calcScore(vector<unsigned> nums);
 
 private:

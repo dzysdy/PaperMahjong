@@ -58,6 +58,14 @@ vector<vector<unsigned>> MajhongAlgorithm::scanHappyGroups(const vector<unsigned
     return allGroups;
 }
 
+vector<vector<unsigned> > MajhongAlgorithm::scanStraight(vector<unsigned> nums, unsigned targetNumber)
+{
+    vector<vector<unsigned> > s;
+    nums.push_back(targetNumber);
+    std::sort(nums.begin(), nums.end());
+return s;
+}
+
 int MajhongAlgorithm::calcScore(vector<unsigned> nums)
 {
     std::sort(nums.begin(), nums.end());
@@ -67,7 +75,7 @@ int MajhongAlgorithm::calcScore(vector<unsigned> nums)
 bool MajhongAlgorithm::take2Pairs(vector<unsigned>& nums, unsigned& index) {
     if (index > 0) {
         unsigned num = nums[index-1];
-        while (nums[index] == num)//index range.  to be fixed
+        while (index < nums.size() && nums[index] == num )//index range.  to be fixed
             index++;
     }
 

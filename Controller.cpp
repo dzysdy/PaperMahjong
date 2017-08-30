@@ -71,16 +71,6 @@ void Controller::onMakeHappyGroup()
     handleOperations(operations);
 }
 
-void Controller::onFirstStep(QList<PlayerOperation> operations)
-{
-    handleOperations(operations);
-}
-
-void Controller::onSecondStep(QList<PlayerOperation> operations)
-{
-    handleOperations(operations);
-}
-
 void Controller::onUpdatedDrawedCard(PaperCard *card)
 {
     otherPlayersCard = card;
