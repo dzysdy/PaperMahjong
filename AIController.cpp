@@ -32,11 +32,11 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
 {
     printf("%s: %d step: ",__func__,player->getStep());
     for (PlayerOperation o: operations) {
-        printf(",%s", gButtons[(int)o].toStdString().c_str());
+        printf(",%s", tr(gButtons[(int)o].toStdString().c_str()).toStdString().c_str());
     }
     printf("\n\n");
     fflush(stdout);
-    if (operations.contains(PO_LIAOXI)){
+    if (operations.contains(PO_MAKEGROUP)){
         QList<QList<PaperCard *> > results = algorithm->scanHappyGroups(player->cards());
         for (const QList<PaperCard *>& result: results) {
             selectCardsOnly(result);
@@ -45,11 +45,11 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
         player->makeHappyGroupOk();
     }
     else {
-        if (player->complete(otherPlayersCard)) {
+        if (player->testWinning(otherPlayersCard)) {
             //emit to judgment;
             return;
         }
-        operations.removeOne(PO_HU);
+        operations.removeOne(PO_WIN);
         int currentScore = algorithm->calcCurrentScore(player->cards());
         PlayerOperation highScoreOperation;
         for (PlayerOperation operation: operations) {
@@ -61,12 +61,12 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
         doOperation(highScoreOperation);
     }
 
-    else if (operations.contains(PO_MO)) {
+    if (operations.contains(PO_DRAW)) {
         player->drawsCard();
         //QList<QList<PaperCard *> > results = scanStraight(player->cards(), otherPlayersCard);
         //otherPlayersCard
     }
-    else if  (operations.contains(PO_DA)) {
+    else if  (operations.contains(PO_DISCARD)) {
         PaperCard* card = algorithm->scanDiscard(player->cards());
         QList<PaperCard *> result{card};
         selectCardsOnly(result);
@@ -89,31 +89,31 @@ int AIController::calcOperationScore(PlayerOperation operation)
 void AIController::doOperation(PlayerOperation operation)
 {
     switch (operation) {
-    case PO_EAT:
+    case PO_CHOWS:
 
         break;
-    case PO_PENG:
+    case PO_PONGS:
 
         break;
-    case PO_DING:
+    case PO_PAIR:
 
         break;
-    case PO_HU:
+    case PO_WIN:
 
         break;
-    case PO_DA:
+    case PO_DISCARD:
 
         break;
-    case PO_MO:
+    case PO_DRAW:
 
         break;
-    case PO_LIAOXI:
+    case PO_MAKEGROUP:
 
         break;
-    case PO_GUOXI:
+    case PO_ATTACHGROUP:
 
         break;
-    case PO_OK:
+    case PO_MAKEGROUPOK:
 
         break;
     default:

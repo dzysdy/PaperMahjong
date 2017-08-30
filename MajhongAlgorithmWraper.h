@@ -13,11 +13,11 @@ class MajhongAlgorithmWraper
 public:
     static MajhongAlgorithmWraper* instance();
 
-    bool is3Straight(const QList<PaperCard*>& cards);
-    bool is2Pairs(const QList<PaperCard*>& cards);
-    bool is3Pairs(const QList<PaperCard*>& cards);
+    bool isChow(const QList<PaperCard*>& cards);
+    bool isPair(const QList<PaperCard*>& cards);
+    bool isMelds(const QList<PaperCard*>& cards);
     bool isHappyGroup(const QList<PaperCard*>& cards);
-    bool isCompleteAHand(const QList<PaperCard*>& cards);
+    bool isWinningHand(const QList<PaperCard*>& cards);
 
     int calcCurrentScore(const QList<PaperCard*>& cards);
     QList<QList<PaperCard*>> scanHappyGroups(QList<PaperCard*> cards);

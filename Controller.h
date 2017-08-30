@@ -19,6 +19,7 @@ class Controller : public QObject
     Q_OBJECT
 public:
     explicit Controller(Player* p, QObject *parent = 0);
+    virtual ~Controller();
 
     QWidget* widget();
     CardView *getCardsView() const;

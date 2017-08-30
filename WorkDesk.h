@@ -5,8 +5,10 @@
 class WorkDesk : public Controller
 {
     Q_OBJECT
+
 public:
-    WorkDesk(Player* p, QObject *parent = 0);
+    explicit WorkDesk(Player* p, QObject *parent = 0);
+    virtual ~WorkDesk();
 
     virtual void setMyTurn(bool show);
     virtual void handleOperations(QList<PlayerOperation> operations);

@@ -40,6 +40,11 @@ Controller::Controller(Player *p, QObject *parent) :
     isMyTurn = false;
 }
 
+Controller::~Controller()
+{
+
+}
+
 QWidget *Controller::widget()
 {
     return desk;
@@ -66,8 +71,8 @@ void Controller::onUpdateTime(unsigned sec)
 void Controller::onMakeHappyGroup()
 {
     QList<PlayerOperation> operations;
-    operations.push_back(PO_LIAOXI);
-    operations.push_back(PO_OK);
+    operations.push_back(PO_MAKEGROUP);
+    operations.push_back(PO_MAKEGROUPOK);
     handleOperations(operations);
 }
 

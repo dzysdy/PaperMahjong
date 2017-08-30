@@ -17,24 +17,24 @@ MajhongAlgorithmWraper *MajhongAlgorithmWraper::instance()
     return me;
 }
 
-bool MajhongAlgorithmWraper::is3Straight(const QList<PaperCard *> &cards) {
-    return algorithm->is3Straight(cards2Numbers(cards));
+bool MajhongAlgorithmWraper::isChow(const QList<PaperCard *> &cards) {
+    return algorithm->isChow(cards2Numbers(cards));
 }
 
-bool MajhongAlgorithmWraper::is2Pairs(const QList<PaperCard *> &cards) {
-    return algorithm->is2Pairs(cards2Numbers(cards));
+bool MajhongAlgorithmWraper::isPair(const QList<PaperCard *> &cards) {
+    return algorithm->isPair(cards2Numbers(cards));
 }
 
-bool MajhongAlgorithmWraper::is3Pairs(const QList<PaperCard *> &cards) {
-    return algorithm->is3Pairs(cards2Numbers(cards));
+bool MajhongAlgorithmWraper::isMelds(const QList<PaperCard *> &cards) {
+    return algorithm->isMelds(cards2Numbers(cards));
 }
 
 bool MajhongAlgorithmWraper::isHappyGroup(const QList<PaperCard *> &cards) {
     return algorithm->isHappyGroup(cards2Numbers(cards));
 }
 
-bool MajhongAlgorithmWraper::isCompleteAHand(const QList<PaperCard *> &cards) {
-    return algorithm->isCompleteAHand(cards2Numbers(cards));
+bool MajhongAlgorithmWraper::isWinningHand(const QList<PaperCard *> &cards) {
+    return algorithm->isWinningHand(cards2Numbers(cards));
 }
 
 int MajhongAlgorithmWraper::calcCurrentScore(const QList<PaperCard *> &cards)

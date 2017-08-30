@@ -4,6 +4,8 @@
 
 class AIController : public Controller
 {
+    Q_OBJECT
+
 public:
     AIController(Player* p, QObject *parent = 0);
     virtual void setMyTurn(bool b);

@@ -12,15 +12,15 @@ class CardModel;
 
 enum PlayerOperation {
     PO_NONE,
-    PO_EAT,
-    PO_PENG,
-    PO_DING,
-    PO_HU,
-    PO_DA,
-    PO_MO,
-    PO_LIAOXI,
-    PO_GUOXI,
-    PO_OK
+    PO_CHOWS,
+    PO_PONGS,
+    PO_PAIR,
+    PO_WIN,
+    PO_DISCARD,
+    PO_DRAW,
+    PO_MAKEGROUP,
+    PO_ATTACHGROUP,
+    PO_MAKEGROUPOK
 };
 
 class Player : public QObject
@@ -38,12 +38,12 @@ public:
     PaperCard* drawsCard();
     bool discard();
 
-    bool eat(PaperCard* drawedCard);
-    bool doubleEat(PaperCard* drawedCard);
-    bool singleEat(PaperCard* drawedCard);
+    bool chows(PaperCard* drawedCard);
+    bool pongs(PaperCard* drawedCard);
+    bool makePair(PaperCard* drawedCard);
     bool makeHappyGroup();
     bool attachHappyGroup();
-    bool complete(PaperCard* drawedCard);
+    bool testWinning(PaperCard* drawedCard);
 
     void makeHappyGroupOk();
     void doFirstStep(int operation);

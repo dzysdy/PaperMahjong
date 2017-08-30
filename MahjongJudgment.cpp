@@ -52,14 +52,14 @@ void MahjongJudgment::onSecondStepCompleted(PlayerOperation operation)
 {
     lastStep = OS_SECONDSTEP;
     switch (operation) {
-    case PO_DA:
+    case PO_DISCARD:
         changeTurn();
         doFirstStep(operation);
         break;
-    case PO_LIAOXI:
+    case PO_MAKEGROUP:
         doFirstStep(operation);
         break;
-    case PO_HU:
+    case PO_WIN:
         printf("game over");fflush(stdout);
         break;
     default:
@@ -191,23 +191,23 @@ void MahjongJudgment::calcOperatrion(PlayerOperation lastOperation, QList<Player
 {
     switch (lastStep) {
     case OS_HAPPYGROUP:
-        operations.push_back(PO_DA);
+        operations.push_back(PO_DISCARD);
         break;
     case OS_FIRSTSTEP:
-        if (lastOperation == PO_MO){
-            operations.push_back(PO_GUOXI);
-            operations.push_back(PO_HU);
+        if (lastOperation == PO_DRAW){
+            operations.push_back(PO_ATTACHGROUP);
+            operations.push_back(PO_WIN);
         }
-        operations.push_back(PO_DA);
+        operations.push_back(PO_DISCARD);
         break;
     case OS_SECONDSTEP:
-        if (lastOperation == PO_DA) {
-            operations.push_back(PO_EAT);
-            operations.push_back(PO_PENG);
-            operations.push_back(PO_DING);
-            operations.push_back(PO_HU);
+        if (lastOperation == PO_DISCARD) {
+            operations.push_back(PO_CHOWS);
+            operations.push_back(PO_PONGS);
+            operations.push_back(PO_PAIR);
+            operations.push_back(PO_WIN);
         }
-        operations.push_back(PO_MO);
+        operations.push_back(PO_DRAW);
         break;
     default:
         break;

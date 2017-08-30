@@ -24,6 +24,11 @@ WorkDesk::WorkDesk(Player *p, QObject *parent):
     initailButtons();
 }
 
+WorkDesk::~WorkDesk()
+{
+
+}
+
 void WorkDesk::setMyTurn(bool show)
 {
     showBtn = show;
@@ -91,22 +96,22 @@ void WorkDesk::onOperatBtnClicked()
         }
     }
     else if (name == tr("chi")) {
-        if (!player->eat(otherPlayersCard)){
+        if (!player->chows(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }
     else if (name == tr("peng")) {
-        if (!player->doubleEat(otherPlayersCard)){
+        if (!player->pongs(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }
     else if (name == tr("ding")) {
-        if (!player->singleEat(otherPlayersCard)){
+        if (!player->makePair(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }
     else if (name == tr("hu")) {
-        if (player->complete(otherPlayersCard)){
+        if (player->testWinning(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Congradulations!"), tr("You Win! 200."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }

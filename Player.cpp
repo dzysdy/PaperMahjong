@@ -38,7 +38,7 @@ PaperCard* Player::drawsCard() {
     PaperCard* card = paperMahjong->getCard();
     card->setSelected(true);
     addCardToModel(card);
-    lastOperation = PO_MO;
+    lastOperation = PO_DRAW;
     notifyStepCompleted();
     return card;
 }
@@ -49,49 +49,49 @@ bool Player::discard()
     if (cards.size() == 1) {
         removeCardsFromModel(cards);
         emit controller->updateDrawedArea(cards.first());
-        lastOperation = PO_DA;
+        lastOperation = PO_DISCARD;
         notifyStepCompleted();
         return true;
     }
     return false;
 }
 
-bool Player::eat(PaperCard* drawedCard)
+bool Player::chows(PaperCard* drawedCard)
 {
     QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
-    if (algorithm->is3Straight(cards)) {
+    if (algorithm->isChow(cards)) {
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
-        lastOperation = PO_EAT;
+        lastOperation = PO_CHOWS;
         notifyStepCompleted();
         return true;
     }
     return false;
 }
 
-bool Player::doubleEat(PaperCard* drawedCard)
+bool Player::pongs(PaperCard* drawedCard)
 {
     QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
-    if (algorithm->is3Pairs(cards)) {
+    if (algorithm->isMelds(cards)) {
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
-        lastOperation = PO_PENG;
+        lastOperation = PO_PONGS;
         notifyStepCompleted();
         return true;
     }
     return false;
 }
 
-bool Player::singleEat(PaperCard* drawedCard)
+bool Player::makePair(PaperCard* drawedCard)
 {
     QList<PaperCard *> cards = getSelectedCards();
     cards.push_back(drawedCard);
-    if (algorithm->is2Pairs(cards)) {
+    if (algorithm->isPair(cards)) {
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
-        lastOperation = PO_DING;
+        lastOperation = PO_PAIR;
         notifyStepCompleted();
         return true;
     }
@@ -104,7 +104,7 @@ bool Player::makeHappyGroup()
     if (algorithm->isHappyGroup(cards)) {
         controller->moveToCardGroupArea(cards);
         removeCardsFromModel(cards);
-        lastOperation = PO_LIAOXI;
+        lastOperation = PO_MAKEGROUP;
         return true;
     }
     return false;
@@ -115,13 +115,13 @@ bool Player::attachHappyGroup()
     return false;
 }
 
-bool Player::complete(PaperCard *drawedCard)
+bool Player::testWinning(PaperCard *drawedCard)
 {
     QList<PaperCard*> cards(paperCards);
     if (drawedCard)
         cards.push_back(drawedCard);
-    if (algorithm->isCompleteAHand(cards)){
-        lastOperation = PO_HU;
+    if (algorithm->isWinningHand(cards)){
+        lastOperation = PO_WIN;
         return true;
     }
     return false;
