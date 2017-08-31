@@ -39,7 +39,7 @@ bool MajhongAlgorithmWraper::isWinningHand(const QList<PaperCard *> &cards) {
 
 int MajhongAlgorithmWraper::calcCurrentScore(const QList<PaperCard *> &cards)
 {
-    return 1;
+    return algorithm->calcMeldsAndChowsCount(cards2Numbers(cards));
 }
 
 QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanHappyGroups(const QList<PaperCard *> &cards)
@@ -54,9 +54,26 @@ QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanChow(const QList<PaperCar
     return indexs2Cards(cards, allChows);
 }
 
+QList<PaperCard *> MajhongAlgorithmWraper::scanMelds(const QList<PaperCard *> &cards, PaperCard *card)
+{
+    unsigned firstIndex = algorithm->scanMelds(cards2Numbers(cards), card->getCardNumber());
+    QList<PaperCard *> result;
+    if (firstIndex < cards.size()) {
+        result.push_back(cards.at(firstIndex));
+        result.push_back(cards.at(firstIndex+1));
+    }
+    return result;
+}
+
 PaperCard *MajhongAlgorithmWraper::scanDiscard(QList<PaperCard *> cards)
 {
-    return cards.first();
+    vector<unsigned> lonelyCardIndexs = algorithm->scanLonelyCard(cards2Numbers(cards));
+    if (!lonelyCardIndexs.empty()) {
+        return cards[lonelyCardIndexs.back()];
+    }
+    else {
+        return cards.back();
+    }
 }
 
 vector<unsigned> MajhongAlgorithmWraper::cards2Numbers(const QList<PaperCard *> &cards)

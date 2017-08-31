@@ -22,7 +22,7 @@ public:
     int calcCurrentScore(const QList<PaperCard*>& cards);
     QList<QList<PaperCard*>> scanHappyGroups(const QList<PaperCard*>& cards);
     QList<QList<PaperCard*>> scanChow(const QList<PaperCard*>& cards, PaperCard* card);
-
+    QList<PaperCard*> scanMelds(const QList<PaperCard*>& cards, PaperCard* card);
     PaperCard* scanDiscard(QList<PaperCard*> cards);
 
 private:

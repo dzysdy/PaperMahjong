@@ -12,11 +12,13 @@ public:
     virtual void handleOperations(QList<PlayerOperation> operations);
 
 private:
-    void selectCardsOnly(const QList<PaperCard *> cards);
-    int calcOperationScore(PlayerOperation operation);
+    void selectCardsOnly(const QList<PaperCard *>& cards);
+    float calcOperationScore(PlayerOperation operation, QList<PaperCard *> &data);
     void doOperation(PlayerOperation operation);
-
+    int calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList<PaperCard*>& cardsToRemove);
     MajhongAlgorithmWraper* algorithm;
+    QList<PaperCard *> operatData;
+    float meldsCount;
 };
 
 #endif // AICONTROLLER_H

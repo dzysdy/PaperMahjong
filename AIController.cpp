@@ -1,6 +1,7 @@
 #include "AIController.h"
 #include "MajhongAlgorithmWraper.h"
 #include "PaperCard.h"
+#include <assert.h>
 #include <QDebug>
 
 const QString gButtons[] = {
@@ -50,65 +51,68 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
             return;
         }
         operations.removeOne(PO_WIN);
-        int currentScore = algorithm->calcCurrentScore(player->cards());
+        meldsCount = algorithm->calcCurrentScore(player->cards());
+        qDebug()<<__func__<<"meldsCount:"<<meldsCount;
+
         PlayerOperation highScoreOperation;
         for (PlayerOperation operation: operations) {
-            int score = calcOperationScore(operation);
-            if (score > currentScore) {
+            QList<PaperCard *> data;
+            float score = calcOperationScore(operation, data);
+            if (score > meldsCount) {
                 highScoreOperation = operation;
+                operatData = data;
             }
         }
         doOperation(highScoreOperation);
     }
-
-    if (operations.contains(PO_DRAW)) {
-        player->drawsCard();
-        //QList<QList<PaperCard *> > results = scanStraight(player->cards(), otherPlayersCard);
-        //otherPlayersCard
-    }
-    else if  (operations.contains(PO_DISCARD)) {
-        PaperCard* card = algorithm->scanDiscard(player->cards());
-        QList<PaperCard *> result{card};
-        selectCardsOnly(result);
-        player->discard();
-    }
 }
 
-void AIController::selectCardsOnly(const QList<PaperCard *> cards)
+void AIController::selectCardsOnly(const QList<PaperCard *> &cards)
 {
     for (PaperCard* card: player->cards()) {
         card->setSelected(cards.contains(card));
     }
 }
 
-int AIController::calcOperationScore(PlayerOperation operation)
+float AIController::calcOperationScore(PlayerOperation operation, QList<PaperCard *>& data)
 {
-    int score = 0;
+    float score = 0;
     switch (operation) {
     case PO_CHOWS:
     {
         QList<QList<PaperCard *> > results = algorithm->scanChow(player->cards(), otherPlayersCard);
-        if (!results.empty()) {
-            selectCardsOnly(results.first());
-            player->chows(otherPlayersCard);
-            score = 2;
+        int higestScore = 0;
+        for (QList<PaperCard *> result: results) {
+            int s = calcScoreWhenRemoveCards(player->cards(), result);
+            if (s > higestScore) {
+                higestScore = s;
+                data = result;
+            }
         }
+        score = higestScore;
         break;
     }
     case PO_PONGS:
-
+    {
+        QList<PaperCard *> result = algorithm->scanMelds(player->cards(), otherPlayersCard);
+        if (!result.empty()) {
+            int s = calcScoreWhenRemoveCards(player->cards(), result);
+            score = s;
+            data = result;
+        }
         break;
+    }
     case PO_PAIR:
 
         break;
     case PO_WIN:
-
+        score = 100;
         break;
     case PO_DISCARD:
-
+        score = 99;
         break;
     case PO_DRAW:
-
+        score = meldsCount + 0.2;
         break;
     case PO_MAKEGROUP:
 
@@ -129,10 +133,16 @@ void AIController::doOperation(PlayerOperation operation)
 {
     switch (operation) {
     case PO_CHOWS:
-
+    {
+        assert(operatData.size() == 2);
+        selectCardsOnly(operatData);
+        player->chows(otherPlayersCard);
         break;
+    }
     case PO_PONGS:
-
+        assert(operatData.size() == 2);
+        selectCardsOnly(operatData);
+        player->pongs(otherPlayersCard);
         break;
     case PO_PAIR:
 
@@ -141,10 +151,15 @@ void AIController::doOperation(PlayerOperation operation)
 
         break;
     case PO_DISCARD:
-
+    {
+        PaperCard* card = algorithm->scanDiscard(player->cards());
+        QList<PaperCard *> result{card};
+        selectCardsOnly(result);
+        player->discard();
+    }
         break;
     case PO_DRAW:
-
+        player->drawsCard();
         break;
     case PO_MAKEGROUP:
 
@@ -158,4 +173,14 @@ void AIController::doOperation(PlayerOperation operation)
     default:
         break;
     }
+}
+
+int AIController::calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList<PaperCard *> &cardsToRemove)
+{
+    for (PaperCard* card : cardsToRemove) {
+        if (cards.contains(card)) {
+            cards.removeOne(card);
+        }
+    }
+    return algorithm->calcCurrentScore(cards);
 }

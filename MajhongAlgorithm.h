@@ -19,8 +19,11 @@ public:
     bool isHappyGroup(vector<unsigned> nums);
     bool isWinningHand(vector<unsigned> nums);
     bool isReadyHand(const vector<unsigned>& nums);
+    unsigned calcMeldsAndChowsCount(const vector<unsigned>& nums);
     vector<vector<unsigned>> scanHappyGroups(const vector<unsigned> &nums);
     vector<vector<unsigned>> scanChow(const vector<unsigned>& nums, unsigned targetNumber);
+    unsigned scanMelds(const vector<unsigned>& nums, unsigned targetNumber);
+    vector<unsigned> scanLonelyCard(const vector<unsigned> &nums);
     MahjongSocreRecorder calcScore(const vector<unsigned> &nums);
 
 private:
@@ -30,7 +33,6 @@ private:
     bool takeAllMeldsAndChow(vector<unsigned> &nums);
     bool isWinningHand(vector<unsigned> &nums, unsigned &index);
     void scanHappyGroup(const vector<unsigned>& nums, const set<unsigned> &happyGroup, vector<vector<unsigned> > &groups);
-    unsigned calcMeldsAndChowsCount(const vector<unsigned>& nums);
 };
 
 #endif // MAJHONGALGORITHM_H
