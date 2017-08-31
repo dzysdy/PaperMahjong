@@ -83,7 +83,46 @@ void AIController::selectCardsOnly(const QList<PaperCard *> cards)
 
 int AIController::calcOperationScore(PlayerOperation operation)
 {
-    return 1;
+    int score = 0;
+    switch (operation) {
+    case PO_CHOWS:
+    {
+        QList<QList<PaperCard *> > results = algorithm->scanChow(player->cards(), otherPlayersCard);
+        if (!results.empty()) {
+            selectCardsOnly(results.first());
+            player->chows(otherPlayersCard);
+            score = 2;
+        }
+        break;
+    }
+    case PO_PONGS:
+
+        break;
+    case PO_PAIR:
+
+        break;
+    case PO_WIN:
+
+        break;
+    case PO_DISCARD:
+
+        break;
+    case PO_DRAW:
+
+        break;
+    case PO_MAKEGROUP:
+
+        break;
+    case PO_ATTACHGROUP:
+
+        break;
+    case PO_MAKEGROUPOK:
+
+        break;
+    default:
+        break;
+    }
+    return score;
 }
 
 void AIController::doOperation(PlayerOperation operation)

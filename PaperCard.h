@@ -14,11 +14,11 @@ class PaperCard : public QObject, public QObjectUserData
     Q_OBJECT
 public:
     enum CardType {
-        CT_BING = 1,
-        CT_TIAO = 21,
-        CT_WAN = 41,
-        CT_WHITE = 61,
-        CT_RED = 71,
+        CT_DOTS = 1,
+        CT_BAMBOO = 21,
+        CT_CHARACTERS = 41,
+        CT_WHITEFLOWER = 61,
+        CT_REDFLOWER = 71,
         CT_SHARKS = 81
     };
 

@@ -63,21 +63,21 @@ unsigned HappyGroupHelper::getCardNumberTypeByName(const QString &name)
         number = PaperCard::CT_SHARKS;
     }
     else if (name == "white") {
-        number = PaperCard::CT_WHITE;
+        number = PaperCard::CT_WHITEFLOWER;
     }
     else if (name == "red") {
-        number = PaperCard::CT_RED;
+        number = PaperCard::CT_REDFLOWER;
     }
     else if (name.contains("b_")) {
-        number = PaperCard::CT_BING;
+        number = PaperCard::CT_DOTS;
         number += name.right(1).toInt() - 1;
     }
     else if (name.contains("t_")) {
-        number = PaperCard::CT_TIAO;
+        number = PaperCard::CT_BAMBOO;
         number += name.right(1).toInt() - 1;
     }
     else if (name.contains("w_")) {
-        number = PaperCard::CT_WAN;
+        number = PaperCard::CT_CHARACTERS;
         number += name.right(1).toInt() - 1;
     }
     return number;

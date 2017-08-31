@@ -22,21 +22,21 @@ unsigned PaperCard::getCardNumber() const
 
 void PaperCard::setNameByNumber(unsigned number)
 {
-    if (number < CT_TIAO) {
-        name = "b_" + QString::number(number - CT_BING + 1);
+    if (number < CT_BAMBOO) {
+        name = "b_" + QString::number(number - CT_DOTS + 1);
     }
-    else if (number < CT_WAN) {
-        name = "t_" + QString::number(number - CT_TIAO + 1);
+    else if (number < CT_CHARACTERS) {
+        name = "t_" + QString::number(number - CT_BAMBOO + 1);
     }
-    else if (number < CT_WHITE) {
-        name = "w_" + QString::number(number - CT_WAN + 1);
+    else if (number < CT_WHITEFLOWER) {
+        name = "w_" + QString::number(number - CT_CHARACTERS + 1);
     }
     else {
         switch (number) {
-        case CT_WHITE:
+        case CT_WHITEFLOWER:
             name = "white";
             break;
-        case CT_RED:
+        case CT_REDFLOWER:
             name = "red";
             break;
         case CT_SHARKS:

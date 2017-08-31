@@ -42,18 +42,16 @@ int MajhongAlgorithmWraper::calcCurrentScore(const QList<PaperCard *> &cards)
     return 1;
 }
 
-QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanHappyGroups(QList<PaperCard *> cards)
+QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanHappyGroups(const QList<PaperCard *> &cards)
 {
     vector<vector<unsigned>> groups = algorithm->scanHappyGroups(cards2Numbers(cards));
-    QList<QList<PaperCard *> > results;
-    for (const vector<unsigned>& group: groups) {
-        QList<PaperCard *> result;
-        for (unsigned num: group) {
-            result.push_back(cards.at(num));
-        }
-        results.push_back(result);
-    }
-    return results;
+    return indexs2Cards(cards, groups);
+}
+
+QList<QList<PaperCard *> > MajhongAlgorithmWraper::scanChow(const QList<PaperCard *> &cards, PaperCard *card)
+{
+    vector<vector<unsigned>> allChows = algorithm->scanChow(cards2Numbers(cards), card->getCardNumber());
+    return indexs2Cards(cards, allChows);
 }
 
 PaperCard *MajhongAlgorithmWraper::scanDiscard(QList<PaperCard *> cards)
@@ -68,4 +66,17 @@ vector<unsigned> MajhongAlgorithmWraper::cards2Numbers(const QList<PaperCard *> 
         nums.push_back(card->getCardNumber());
     }
     return nums;
+}
+
+QList<QList<PaperCard *> > MajhongAlgorithmWraper::indexs2Cards(const QList<PaperCard *> &cards, const vector<vector<unsigned> > &indexs)
+{
+    QList<QList<PaperCard *> > results;
+    for (const vector<unsigned>& index: indexs) {
+        QList<PaperCard *> result;
+        for (unsigned num: index) {
+            result.push_back(cards.at(num));
+        }
+        results.push_back(result);
+    }
+    return results;
 }

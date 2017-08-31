@@ -34,6 +34,18 @@
        </item>
        <item>
         <widget class="QPushButton" name="startBtn">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>新的一局</string>
          </property>

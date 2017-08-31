@@ -65,46 +65,46 @@ vector<vector<unsigned>> MajhongAlgorithm::scanHappyGroups(const vector<unsigned
 
 vector<vector<unsigned> > MajhongAlgorithm::scanChow(const vector<unsigned>& nums, unsigned targetNumber)
 {
-    vector<vector<unsigned> > allStraights;
+    vector<vector<unsigned> > allChows;
     auto left1 = std::find(nums.begin(), nums.end(), targetNumber - 1);
     auto right1 = std::find(nums.begin(), nums.end(), targetNumber + 1);
     if (left1 != nums.end()) {
         auto left2 = std::find(nums.begin(), nums.end(), targetNumber - 2);
         if (left2 != nums.end()) {
-            vector<unsigned> straight{left2 - nums.begin(), left1 - nums.begin()};
-            allStraights.push_back(straight);
+            vector<unsigned> chow{left2 - nums.begin(), left1 - nums.begin()};
+            allChows.push_back(chow);
         }
     }
 
     if (right1 != nums.end()) {
         auto right2 = std::find(nums.begin(), nums.end(), targetNumber + 2);
         if (right2 != nums.end()) {
-            vector<unsigned> straight{right1 - nums.begin(), right2 - nums.begin()};
-            allStraights.push_back(straight);
+            vector<unsigned> chow{right1 - nums.begin(), right2 - nums.begin()};
+            allChows.push_back(chow);
         }
     }
 
     if (left1 != nums.end() && right1 != nums.end()) {
-        vector<unsigned> straight{left1 - nums.begin(), right1 - nums.begin()};
-        allStraights.push_back(straight);
+        vector<unsigned> chow{left1 - nums.begin(), right1 - nums.begin()};
+        allChows.push_back(chow);
     }
-    return allStraights;
+    return allChows;
 }
 
-MahjongSocreRecorder MajhongAlgorithm::calcScore(vector<unsigned> nums)
+MahjongSocreRecorder MajhongAlgorithm::calcScore(const vector<unsigned>& nums)
 {
     MahjongSocreRecorder mahjongScore;
     vector<unsigned> score;
-    std::sort(nums.begin(), nums.end());
-    takeAllMeldsAndChow(nums);
-    //score.push_back();
+    unsigned readHandScore = calcMeldsAndChowsCount(nums);
+    score.push_back(readHandScore);
+
     return mahjongScore;
 }
 
 bool MajhongAlgorithm::takePair(vector<unsigned>& nums, unsigned& index) {
     if (index > 0) {
         unsigned num = nums[index-1];
-        while (index < nums.size() && nums[index] == num )//index range.  to be fixed
+        while (index < nums.size() && nums[index] == num )
             index++;
     }
 
@@ -187,5 +187,8 @@ void MajhongAlgorithm::scanHappyGroup(const vector<unsigned>& nums, const set<un
 
 unsigned MajhongAlgorithm::calcMeldsAndChowsCount(const vector<unsigned> &nums)
 {
-    return 0;
+    vector<unsigned> copyNums(nums);
+    std::sort(copyNums.begin(), copyNums.end());
+    takeAllMeldsAndChow(copyNums);
+    return (nums.size() - copyNums.size())%3;
 }

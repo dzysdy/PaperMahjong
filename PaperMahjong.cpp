@@ -6,11 +6,11 @@ PaperMahjong::PaperMahjong(QObject *parent) : QObject(parent)
 }
 
 void PaperMahjong::shuffleCards() {
-    initCustomCard(PaperCard::CT_BING);
-    initCustomCard(PaperCard::CT_TIAO);
-    initCustomCard(PaperCard::CT_WAN);
-    initFourCards(PaperCard::CT_RED);
-    initFourCards(PaperCard::CT_WHITE);
+    initCustomCard(PaperCard::CT_DOTS);
+    initCustomCard(PaperCard::CT_BAMBOO);
+    initCustomCard(PaperCard::CT_CHARACTERS);
+    initFourCards(PaperCard::CT_REDFLOWER);
+    initFourCards(PaperCard::CT_WHITEFLOWER);
     initFourCards(PaperCard::CT_SHARKS);
 }
 

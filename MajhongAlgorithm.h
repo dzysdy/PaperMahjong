@@ -21,7 +21,7 @@ public:
     bool isReadyHand(const vector<unsigned>& nums);
     vector<vector<unsigned>> scanHappyGroups(const vector<unsigned> &nums);
     vector<vector<unsigned>> scanChow(const vector<unsigned>& nums, unsigned targetNumber);
-    MahjongSocreRecorder calcScore(vector<unsigned> nums);
+    MahjongSocreRecorder calcScore(const vector<unsigned> &nums);
 
 private:
     bool takePair(vector<unsigned> &nums, unsigned &index);

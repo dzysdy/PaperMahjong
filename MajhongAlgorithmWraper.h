@@ -20,12 +20,15 @@ public:
     bool isWinningHand(const QList<PaperCard*>& cards);
 
     int calcCurrentScore(const QList<PaperCard*>& cards);
-    QList<QList<PaperCard*>> scanHappyGroups(QList<PaperCard*> cards);
+    QList<QList<PaperCard*>> scanHappyGroups(const QList<PaperCard*>& cards);
+    QList<QList<PaperCard*>> scanChow(const QList<PaperCard*>& cards, PaperCard* card);
+
     PaperCard* scanDiscard(QList<PaperCard*> cards);
 
 private:
     MajhongAlgorithmWraper();
     vector<unsigned> cards2Numbers(const QList<PaperCard*>& cards);
+    QList<QList<PaperCard *> > indexs2Cards(const QList<PaperCard *> &cards, const vector<vector<unsigned>>& indexs);
 
     static MajhongAlgorithmWraper* me;
     MajhongAlgorithm* algorithm;
