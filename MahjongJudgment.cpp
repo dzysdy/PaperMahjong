@@ -81,14 +81,9 @@ void MahjongJudgment::onUpdateTime(unsigned sec)
     currentPlayer()->getController()->onUpdateTime(sec);
 }
 
-void MahjongJudgment::onFirstStep(QList<PlayerOperation> operations)
+void MahjongJudgment::onHandleOperations(QList<PlayerOperation> operations)
 {
-    currentPlayer()->getController()->onFirstStep(operations);
-}
-
-void MahjongJudgment::onSecondStep(QList<PlayerOperation> operations)
-{
-    currentPlayer()->getController()->onSecondStep(operations);
+    currentPlayer()->getController()->handleOperations(operations);
 }
 
 void MahjongJudgment::playersDrawsCards()
@@ -110,8 +105,7 @@ void MahjongJudgment::connectSignals(Player *player)
     connect(player, &Player::makedHappyGroup, this, &MahjongJudgment::onMakedHappyGroup);
 
     connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);
-    connect(this, &MahjongJudgment::firstStep, this, &MahjongJudgment::onFirstStep);
-    connect(this, &MahjongJudgment::secondStep, this, &MahjongJudgment::onSecondStep);
+    connect(this, &MahjongJudgment::asynHandleOperations, this, &MahjongJudgment::onHandleOperations);
 }
 
 void MahjongJudgment::changeTurn()
@@ -139,7 +133,7 @@ void MahjongJudgment::doFirstStep(PlayerOperation operation)
     currentPlayer()->doFirstStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
-    emit firstStep(operations);
+    emit asynHandleOperations(operations);
     timeReminded = BEFORE_DRAWSCARD_TIME;
     isTimeRecording = true;
 }
@@ -150,7 +144,7 @@ void MahjongJudgment::doSecondStep(PlayerOperation operation)
     currentPlayer()->doSecondStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
-    emit secondStep(operations);
+    emit asynHandleOperations(operations);
     timeReminded = AFTER_DRAWSCARD_TIME;
     isTimeRecording = true;
 }

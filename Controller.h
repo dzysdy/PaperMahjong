@@ -26,10 +26,9 @@ public:
     void connectSignals(MahjongJudgment* judgment);
     void moveToCardGroupArea(QList<PaperCard *> cards);
     void onUpdateTime(unsigned sec);
-    void onFirstStep(QList<PlayerOperation> operations);
-    void onSecondStep(QList<PlayerOperation> operations);
 
     virtual void setMyTurn(bool b);
+    virtual void handleOperations(QList<PlayerOperation>){}
 
 signals:
     void updateDrawedArea(PaperCard *card);
@@ -39,8 +38,6 @@ public slots:
     void onUpdatedDrawedCard(PaperCard* card);
 
 protected:
-    virtual void handleOperations(QList<PlayerOperation>){}
-
     Player* player;
     QWidget* desk;
     QHBoxLayout* mainLayout;

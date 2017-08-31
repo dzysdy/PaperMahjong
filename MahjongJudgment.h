@@ -31,8 +31,7 @@ signals:
     void makeHappyGroup();
 
     void updateTime(unsigned sec);
-    void firstStep(QList<PlayerOperation> operations);
-    void secondStep(QList<PlayerOperation> operations);
+    void asynHandleOperations(QList<PlayerOperation> operations);
 
 public slots:
     void onTimer();
@@ -41,8 +40,7 @@ public slots:
     void onMakedHappyGroup();
 
     void onUpdateTime(unsigned sec);
-    void onFirstStep(QList<PlayerOperation> operations);
-    void onSecondStep(QList<PlayerOperation> operations);
+    void onHandleOperations(QList<PlayerOperation> operations);
 
 private:
     void playersDrawsCards();

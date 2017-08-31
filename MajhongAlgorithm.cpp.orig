@@ -63,7 +63,19 @@ vector<vector<unsigned>> MajhongAlgorithm::scanHappyGroups(const vector<unsigned
     return allGroups;
 }
 
+<<<<<<< HEAD
 vector<vector<unsigned> > MajhongAlgorithm::scanChow(const vector<unsigned>& nums, unsigned targetNumber)
+=======
+vector<vector<unsigned> > MajhongAlgorithm::scanStraight(vector<unsigned> nums, unsigned targetNumber)
+{
+    vector<vector<unsigned> > s;
+    nums.push_back(targetNumber);
+    std::sort(nums.begin(), nums.end());
+return s;
+}
+
+int MajhongAlgorithm::calcScore(vector<unsigned> nums)
+>>>>>>> 8cf424c87d487df723954aea9eb9ea20cce72a83
 {
     vector<vector<unsigned> > allStraights;
     auto left1 = std::find(nums.begin(), nums.end(), targetNumber - 1);
