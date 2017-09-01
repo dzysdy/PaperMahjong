@@ -32,8 +32,6 @@ SOURCES += main.cpp\
     Util.cpp \
     CardContainer.cpp \
     HappyGroupWidget.cpp \
-    MajhongAlgorithm.cpp \
-    MajhongAlgorithmWraper.cpp \
     HappyGroupHelper.cpp \
     WorkDesk.cpp \
     Controller.cpp \
@@ -41,7 +39,9 @@ SOURCES += main.cpp\
     CardView.cpp \
     CardModel.cpp \
     ControllerFactory.cpp \
-    MahjongSocreRecorder.cpp
+    MahjongSocreRecorder.cpp \
+    MahjongAlgorithm.cpp \
+    MahjongAlgorithmWraper.cpp
 
 HEADERS  += MainWindow.h \
     PaperMahjong.h \
@@ -51,8 +51,6 @@ HEADERS  += MainWindow.h \
     Util.h \
     CardContainer.h \
     HappyGroupWidget.h \
-    MajhongAlgorithm.h \
-    MajhongAlgorithmWraper.h \
     HappyGroupHelper.h \
     WorkDesk.h \
     Controller.h \
@@ -60,6 +58,8 @@ HEADERS  += MainWindow.h \
     CardView.h \
     CardModel.h \
     ControllerFactory.h \
-    MahjongSocreRecorder.h
+    MahjongSocreRecorder.h \
+    MahjongAlgorithm.h \
+    MahjongAlgorithmWraper.h
 
 FORMS    += mainwindow.ui

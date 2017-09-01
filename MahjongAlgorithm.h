@@ -8,10 +8,10 @@
 using std::vector;
 using std::set;
 
-class MajhongAlgorithm
+class MahjongAlgorithm
 {
 public:
-    MajhongAlgorithm();
+    MahjongAlgorithm();
 
     bool isChow(vector<unsigned> nums);
     bool isPair(const vector<unsigned>& nums);
@@ -22,7 +22,7 @@ public:
     unsigned calcMeldsAndChowsCount(const vector<unsigned>& nums);
     vector<vector<unsigned>> scanHappyGroups(const vector<unsigned> &nums);
     vector<vector<unsigned>> scanChow(const vector<unsigned>& nums, unsigned targetNumber);
-    unsigned scanMelds(const vector<unsigned>& nums, unsigned targetNumber);
+    int scanMelds(const vector<unsigned>& nums, unsigned targetNumber);
     vector<unsigned> scanLonelyCard(const vector<unsigned> &nums);
     MahjongSocreRecorder calcScore(const vector<unsigned> &nums);
 

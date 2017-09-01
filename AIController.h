@@ -16,7 +16,7 @@ private:
     float calcOperationScore(PlayerOperation operation, QList<PaperCard *> &data);
     void doOperation(PlayerOperation operation);
     int calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList<PaperCard*>& cardsToRemove);
-    MajhongAlgorithmWraper* algorithm;
+    MahjongAlgorithmWraper* algorithm;
     QList<PaperCard *> operatData;
     float meldsCount;
 };

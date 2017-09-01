@@ -5,7 +5,7 @@
 
 class PaperCard;
 class PaperMahjong;
-class MajhongAlgorithmWraper;
+class MahjongAlgorithmWraper;
 class Controller;
 class MahjongJudgment;
 class CardModel;
@@ -74,7 +74,7 @@ private:
     Controller* controller;
     CardModel* cardModel;
     QList<PaperCard*>& paperCards;
-    MajhongAlgorithmWraper* algorithm;
+    MahjongAlgorithmWraper* algorithm;
     PlayerOperation lastOperation;
     int step;
 };

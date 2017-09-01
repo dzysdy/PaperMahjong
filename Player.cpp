@@ -2,7 +2,7 @@
 #include "MahjongJudgment.h"
 #include "PaperMahjong.h"
 #include "PaperCard.h"
-#include "MajhongAlgorithmWraper.h"
+#include "MahjongAlgorithmWraper.h"
 #include "WorkDesk.h"
 #include "AIController.h"
 #include "CardView.h"
@@ -16,7 +16,7 @@ Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, int controllerT
     controller(ControllerFactory::createController((ControllerType)controllerType, this)),
     cardModel(new CardModel()),
     paperCards(cardModel->cards),
-    algorithm(MajhongAlgorithmWraper::instance())
+    algorithm(MahjongAlgorithmWraper::instance())
 {
     controller->connectSignals(judgment);
 }

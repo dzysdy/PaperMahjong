@@ -7,11 +7,11 @@
 using std::vector;
 
 class PaperCard;
-class MajhongAlgorithm;
-class MajhongAlgorithmWraper
+class MahjongAlgorithm;
+class MahjongAlgorithmWraper
 {
 public:
-    static MajhongAlgorithmWraper* instance();
+    static MahjongAlgorithmWraper* instance();
 
     bool isChow(const QList<PaperCard*>& cards);
     bool isPair(const QList<PaperCard*>& cards);
@@ -26,12 +26,12 @@ public:
     PaperCard* scanDiscard(QList<PaperCard*> cards);
 
 private:
-    MajhongAlgorithmWraper();
+    MahjongAlgorithmWraper();
     vector<unsigned> cards2Numbers(const QList<PaperCard*>& cards);
     QList<QList<PaperCard *> > indexs2Cards(const QList<PaperCard *> &cards, const vector<vector<unsigned>>& indexs);
 
-    static MajhongAlgorithmWraper* me;
-    MajhongAlgorithm* algorithm;
+    static MahjongAlgorithmWraper* me;
+    MahjongAlgorithm* algorithm;
 };
 
 #endif // MAJHONGALGORITHMWRAPER_H

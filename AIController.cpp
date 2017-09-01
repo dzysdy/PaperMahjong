@@ -1,5 +1,5 @@
 #include "AIController.h"
-#include "MajhongAlgorithmWraper.h"
+#include "MahjongAlgorithmWraper.h"
 #include "PaperCard.h"
 #include <assert.h>
 #include <QDebug>
@@ -19,7 +19,7 @@ const QString gButtons[] = {
 
 AIController::AIController(Player *p, QObject *parent):
     Controller(p, parent),
-    algorithm(MajhongAlgorithmWraper::instance())
+    algorithm(MahjongAlgorithmWraper::instance())
 {
 
 }
