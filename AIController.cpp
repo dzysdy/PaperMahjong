@@ -54,11 +54,13 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
         meldsCount = algorithm->calcCurrentScore(player->cards());
         qDebug()<<__func__<<"meldsCount:"<<meldsCount;
 
+        float highScore = meldsCount;
         PlayerOperation highScoreOperation;
         for (PlayerOperation operation: operations) {
             QList<PaperCard *> data;
             float score = calcOperationScore(operation, data);
-            if (score > meldsCount) {
+            if (score > highScore) {
+                highScore = score;
                 highScoreOperation = operation;
                 operatData = data;
             }

@@ -161,6 +161,7 @@ bool MahjongAlgorithm::takeOneChow(vector<unsigned>& nums) {
         else if (num == nums[i]) {
             indexs.push_back(i);
             if (indexs.size() == 3) {
+                //erase by reverse order to avoid invalid index.
                 nums.erase(nums.begin() + indexs[2]);
                 nums.erase(nums.begin() + indexs[1]);
                 nums.erase(nums.begin() + indexs[0]);
@@ -208,10 +209,69 @@ void MahjongAlgorithm::scanHappyGroup(const vector<unsigned>& nums, const set<un
     }
 }
 
+unsigned MahjongAlgorithm::removeMelds(vector<unsigned> &nums)
+{
+    unsigned removeNum = 0;
+    if (nums.empty()) {
+        return removeNum;
+    }
+    unsigned baseNums = 1;
+    unsigned base = nums[0];
+    for (auto itor = nums.begin(); itor != nums.end(); ) {
+        if (*itor == base) {
+            if (++baseNums == 3) {
+                removeNum++;
+                itor = nums.erase(itor - 2, itor + 1);
+                continue;
+            }
+        }
+        else {
+            base = *itor;
+            baseNums = 1;
+        }
+        itor++;
+    }
+    return removeNum;
+}
+
+unsigned MahjongAlgorithm::removeChows(vector<unsigned> &nums)
+{
+    unsigned removeNum = 0;
+    if (nums.empty()) {
+        return removeNum;
+    }
+    vector<unsigned> indexs{0};
+    for (int i = 1; i < nums.size(); i++ ) {
+        if (indexs.empty()) {
+            indexs.push_back(i);
+            continue;
+        }
+        int base = nums[indexs.back()];
+        if (nums[i] == base + 1) {
+            indexs.push_back(i);
+            if (indexs.size() == 3) {
+                removeNum++;
+                nums.erase(nums.begin() + indexs[2]);
+                nums.erase(nums.begin() + indexs[1]);
+                nums.erase(nums.begin() + indexs[0]);
+                indexs.clear();
+                i -= 3;
+                continue;
+            }
+        }
+        else if (nums[i] > base + 1){
+           indexs.clear();
+           indexs.push_back(i);
+        }
+    }
+    return removeNum;
+}
+
 unsigned MahjongAlgorithm::calcMeldsAndChowsCount(const vector<unsigned> &nums)
 {
     vector<unsigned> copyNums(nums);
     std::sort(copyNums.begin(), copyNums.end());
-    takeAllMeldsAndChow(copyNums);// to be donw.
-    return (17 - copyNums.size())%3;
+    removeMelds(copyNums);
+    removeChows(copyNums);
+    return (17 - copyNums.size())/3;
 }

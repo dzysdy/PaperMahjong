@@ -8,6 +8,11 @@ CardModel::CardModel(QObject *parent):
 
 }
 
+CardModel::~CardModel()
+{
+    destroy();
+}
+
 void CardModel::update()
 {
     emit updated();
@@ -20,5 +25,14 @@ QList<PaperCard *> CardModel::data()
 
 void CardModel::setData(const QList<PaperCard *> &data)
 {
+    destroy();
     cards = data;
+}
+
+void CardModel::destroy()
+{
+    for (PaperCard* card: cards) {
+        delete card;
+    }
+    cards.clear();
 }

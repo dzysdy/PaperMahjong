@@ -40,7 +40,7 @@ void CardContainer::setCard(PaperCard *card)
     setSelected(false);
     paperCard = card;
     if (paperCard) {
-        QImage image(Util::getResourcePath() + paperCard->getName());
+        QImage image(Util::getResourcePath() + "/sg/" + paperCard->getName());
         setText(card->getName());
         setImage(image);
         show();

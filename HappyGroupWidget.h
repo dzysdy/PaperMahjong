@@ -4,8 +4,8 @@
 #include <QWidget>
 #include <array>
 
+class QLabel;
 class PaperCard;
-class CardContainer;
 class HappyGroupWidget : public QWidget
 {
     Q_OBJECT
@@ -18,7 +18,7 @@ signals:
 public slots:
 
 private:
-    std::array<CardContainer*, 3> containers;
+    std::array<QLabel*, 3> containers;
 };
 
 #endif // HAPPYGROUPWIDGET_H

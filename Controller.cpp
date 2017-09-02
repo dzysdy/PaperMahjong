@@ -10,10 +10,6 @@ Controller::Controller(Player *p, QObject *parent) :
     otherPlayersCard(nullptr)
 {
     desk = new QWidget();
-//    QPalette pal;
-//    pal.setColor(QPalette::Background, Qt::green);
-//    desk->setAutoFillBackground(true);
-//    desk->setPalette(pal);
     mainLayout = new QHBoxLayout();
     desk->setLayout(mainLayout);
 
@@ -35,9 +31,11 @@ Controller::Controller(Player *p, QObject *parent) :
 
     rightLayout = new QVBoxLayout();
     mainLayout->addLayout(rightLayout);
+
+    QLabel* playerName = new QLabel("Player: " + player->getName());
     timeRecoder = new QLCDNumber();
+    rightLayout->addWidget(playerName);
     rightLayout->addWidget(timeRecoder);
-    isMyTurn = false;
 }
 
 Controller::~Controller()

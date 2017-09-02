@@ -67,6 +67,7 @@ QList<PaperCard *> MahjongAlgorithmWraper::scanMelds(const QList<PaperCard *> &c
 
 PaperCard *MahjongAlgorithmWraper::scanDiscard(QList<PaperCard *> cards)
 {
+    std::sort(cards.begin(), cards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
     vector<unsigned> lonelyCardIndexs = algorithm->scanLonelyCard(cards2Numbers(cards));
     if (!lonelyCardIndexs.empty()) {
         return cards[lonelyCardIndexs.back()];

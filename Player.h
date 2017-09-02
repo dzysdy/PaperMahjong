@@ -29,7 +29,7 @@ class Player : public QObject
 
     friend class MahjongJudgment;
 public:
-    explicit Player(PaperMahjong* mahjong, MahjongJudgment* judgment, int controllerType = 0, QObject *parent = 0);
+    explicit Player(PaperMahjong* mahjong, MahjongJudgment* judgment, const QString& playerName, int controllerType = 0, QObject *parent = 0);
     ~Player();
 
     QList<PaperCard*> cards() {return paperCards;}
@@ -51,13 +51,14 @@ public:
 
     QWidget* desk();
     Controller *getController() const;
-
     int getStep() const;
+    QString getName() const;
 
 signals:
     void firstStepCompleted(PlayerOperation operation);
     void secondStepCompleted(PlayerOperation operation);
     void makedHappyGroup();
+    void winningHand(Player* player);
 
 public slots:    
     void onMakeHappyGroup();
@@ -71,6 +72,7 @@ private:
     void removeCardsFromModel(const QList<PaperCard *> &cards);
 
     PaperMahjong* paperMahjong;
+    QString name;
     Controller* controller;
     CardModel* cardModel;
     QList<PaperCard*>& paperCards;

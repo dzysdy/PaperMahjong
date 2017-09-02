@@ -112,7 +112,7 @@ void WorkDesk::onOperatBtnClicked()
     }
     else if (name == tr("hu")) {
         if (player->testWinning(otherPlayersCard)){
-            QMessageBox::information(NULL, tr("Congradulations!"), tr("You Win! 200."), QMessageBox::Ok, QMessageBox::Ok);
+            //QMessageBox::information(NULL, tr("Congradulations!"), tr("You Win! 200."), QMessageBox::Ok, QMessageBox::Ok);
         }
     }
     else if (name == tr("guoxi")) {

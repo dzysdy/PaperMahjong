@@ -38,6 +38,7 @@ public slots:
     void onFirstStepCompleted(PlayerOperation operation);
     void onSecondStepCompleted(PlayerOperation operation);
     void onMakedHappyGroup();
+    void onWinningHand(Player* player);
 
     void onUpdateTime(unsigned sec);
     void onHandleOperations(QList<PlayerOperation> operations);

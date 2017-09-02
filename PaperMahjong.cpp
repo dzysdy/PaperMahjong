@@ -6,6 +6,7 @@ PaperMahjong::PaperMahjong(QObject *parent) : QObject(parent)
 }
 
 void PaperMahjong::shuffleCards() {
+    cardNumbers.clear();
     initCustomCard(PaperCard::CT_DOTS);
     initCustomCard(PaperCard::CT_BAMBOO);
     initCustomCard(PaperCard::CT_CHARACTERS);

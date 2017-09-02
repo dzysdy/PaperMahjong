@@ -10,9 +10,10 @@
 #include "ControllerFactory.h"
 #include <algorithm>
 
-Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, int controllerType, QObject *parent) :
+Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, const QString& playerName, int controllerType, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
+    name(playerName),
     controller(ControllerFactory::createController((ControllerType)controllerType, this)),
     cardModel(new CardModel()),
     paperCards(cardModel->cards),
@@ -122,6 +123,7 @@ bool Player::testWinning(PaperCard *drawedCard)
         cards.push_back(drawedCard);
     if (algorithm->isWinningHand(cards)){
         lastOperation = PO_WIN;
+        emit winningHand(this);
         return true;
     }
     return false;
@@ -199,6 +201,11 @@ void Player::removeCardsFromModel(const QList<PaperCard *> &cards)
 
     if (updated)
         cardModel->update();
+}
+
+QString Player::getName() const
+{
+    return name;
 }
 
 int Player::getStep() const

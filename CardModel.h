@@ -9,6 +9,7 @@ class CardModel: public QObject {
 
 public:
     CardModel(QObject* parent = nullptr);
+    ~CardModel();
 
     void update();
     QList<PaperCard*> data();
@@ -19,6 +20,8 @@ signals:
 
 private:
     friend class Player;
+
+    void destroy();
 
     QList<PaperCard*> cards;
 };

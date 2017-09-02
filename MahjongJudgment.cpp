@@ -2,6 +2,7 @@
 #include "PaperMahjong.h"
 #include "PaperCard.h"
 #include "Controller.h"
+#include <QMessageBox>
 
 #define BEFORE_DRAWSCARD_TIME 30
 #define AFTER_DRAWSCARD_TIME 60
@@ -76,6 +77,12 @@ void MahjongJudgment::onMakedHappyGroup()
         doSecondStep(PO_NONE);
 }
 
+void MahjongJudgment::onWinningHand(Player *player)
+{
+    QMessageBox::information(NULL, tr("Congradulations!"), "Player---" +player->getName() +" Win!", QMessageBox::Ok, QMessageBox::Ok);
+
+}
+
 void MahjongJudgment::onUpdateTime(unsigned sec)
 {
     currentPlayer()->getController()->onUpdateTime(sec);
@@ -103,7 +110,7 @@ void MahjongJudgment::connectSignals(Player *player)
     connect(player, &Player::firstStepCompleted, this, &MahjongJudgment::onFirstStepCompleted);
     connect(player, &Player::secondStepCompleted, this, &MahjongJudgment::onSecondStepCompleted);
     connect(player, &Player::makedHappyGroup, this, &MahjongJudgment::onMakedHappyGroup);
-
+    connect(player, &Player::winningHand, this, &MahjongJudgment::onWinningHand);
     connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);
     connect(this, &MahjongJudgment::asynHandleOperations, this, &MahjongJudgment::onHandleOperations);
 }

@@ -33,6 +33,8 @@ private:
     bool takeAllMeldsAndChow(vector<unsigned> &nums);
     bool isWinningHand(vector<unsigned> &nums, unsigned &index);
     void scanHappyGroup(const vector<unsigned>& nums, const set<unsigned> &happyGroup, vector<vector<unsigned> > &groups);
+    unsigned removeMelds(vector<unsigned>& nums);
+    unsigned removeChows(vector<unsigned>& nums);
 };
 
 #endif // MAJHONGALGORITHM_H
