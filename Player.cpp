@@ -30,6 +30,7 @@ Player::~Player()
 
 void Player::initCards(const QList<PaperCard *>& cards)
 {
+    groupCount = 0;
     cardModel->setData(cards);
     std::sort(paperCards.begin(), paperCards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
     controller->getCardsView()->setModel(cardModel);
@@ -131,6 +132,7 @@ bool Player::testWinning(PaperCard *drawedCard)
 
 void Player::makeHappyGroupOk()
 {
+    groupCount = (17 - paperCards.size())/3;
     controller->setMyTurn(false);
     emit makedHappyGroup();
 }
@@ -201,6 +203,11 @@ void Player::removeCardsFromModel(const QList<PaperCard *> &cards)
 
     if (updated)
         cardModel->update();
+}
+
+int Player::getGroupCount() const
+{
+    return groupCount;
 }
 
 QString Player::getName() const

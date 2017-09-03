@@ -21,8 +21,6 @@ signals:
 private:
     friend class Player;
 
-    void destroy();
-
     QList<PaperCard*> cards;
 };
 

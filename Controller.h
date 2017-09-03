@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QMap>
 #include "Player.h"
+#include <QLabel>
 
 class CardContainer;
 class CardView;
@@ -26,6 +27,7 @@ public:
     void connectSignals(MahjongJudgment* judgment);
     void moveToCardGroupArea(QList<PaperCard *> cards);
     void onUpdateTime(unsigned sec);
+    void onBalance(int deltaMoney);
 
     virtual void setMyTurn(bool b);
     virtual void handleOperations(QList<PlayerOperation>){}
@@ -38,6 +40,8 @@ public slots:
     void onUpdatedDrawedCard(PaperCard* card);
 
 protected:
+    void clearLayout(QLayout *layout);
+
     Player* player;
     QWidget* desk;
     QHBoxLayout* mainLayout;
@@ -52,6 +56,8 @@ protected:
     QLCDNumber* timeRecoder;
     PaperCard* otherPlayersCard;
     bool isMyTurn;
+    int money;
+    QLabel* moneyLabel;
 };
 
 #endif // CONTROLLER_H

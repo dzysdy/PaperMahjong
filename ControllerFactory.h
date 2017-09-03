@@ -11,7 +11,7 @@ class Controller;
 class ControllerFactory
 {
 public:
-    //ControllerFactory() = delete;
+    ControllerFactory() = delete;
 
     static Controller* createController(ControllerType type, Player *player);
 };

@@ -11,6 +11,7 @@ class HappyGroupWidget : public QWidget
     Q_OBJECT
 public:
     explicit HappyGroupWidget(QWidget *parent = 0);
+    ~HappyGroupWidget();
 
     void setCards(QList<PaperCard*> cards);
 signals:
@@ -18,7 +19,9 @@ signals:
 public slots:
 
 private:
+
     std::array<QLabel*, 3> containers;
+    QList<PaperCard*> cards;
 };
 
 #endif // HAPPYGROUPWIDGET_H

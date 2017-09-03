@@ -79,8 +79,18 @@ void MahjongJudgment::onMakedHappyGroup()
 
 void MahjongJudgment::onWinningHand(Player *player)
 {
-    QMessageBox::information(NULL, tr("Congradulations!"), "Player---" +player->getName() +" Win!", QMessageBox::Ok, QMessageBox::Ok);
-
+    //QMessageBox::information(NULL, tr("Congradulations!"), "Player---" +player->getName() +" Win!", QMessageBox::Ok, QMessageBox::Ok);
+    int sumMoney = 0;
+    int deltaMoney = pow(2, player->getGroupCount());
+    for (Player* p: players) {
+        if (p != player) {
+            p->getController()->onBalance(-deltaMoney);
+            sumMoney += deltaMoney;
+        }
+    }
+    player->getController()->onBalance(sumMoney);
+    paperMahjong->destoryDealedCards();
+    start();
 }
 
 void MahjongJudgment::onUpdateTime(unsigned sec)
@@ -108,7 +118,7 @@ void MahjongJudgment::connectSignals(Player *player)
 {
     connect(this, &MahjongJudgment::makeHappyGroup, player, &Player::onMakeHappyGroup);
     connect(player, &Player::firstStepCompleted, this, &MahjongJudgment::onFirstStepCompleted);
-    connect(player, &Player::secondStepCompleted, this, &MahjongJudgment::onSecondStepCompleted);
+    connect(player, &Player::secondStepCompleted, this, &MahjongJudgment::onSecondStepCompleted );
     connect(player, &Player::makedHappyGroup, this, &MahjongJudgment::onMakedHappyGroup);
     connect(player, &Player::winningHand, this, &MahjongJudgment::onWinningHand);
     connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);

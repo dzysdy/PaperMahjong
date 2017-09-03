@@ -13,6 +13,11 @@ HappyGroupWidget::HappyGroupWidget(QWidget *parent) :
         container->move(0, 0 + i*container->height()*0.08);
         containers[i] = container;
     }
+    this->setMinimumWidth(50);
+}
+
+HappyGroupWidget::~HappyGroupWidget()
+{
 }
 
 void HappyGroupWidget::setCards(QList<PaperCard*> cards)

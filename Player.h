@@ -53,6 +53,7 @@ public:
     Controller *getController() const;
     int getStep() const;
     QString getName() const;
+    int getGroupCount() const;
 
 signals:
     void firstStepCompleted(PlayerOperation operation);
@@ -79,6 +80,7 @@ private:
     MahjongAlgorithmWraper* algorithm;
     PlayerOperation lastOperation;
     int step;
+    int groupCount;
 };
 
 #endif // PLAYER_H

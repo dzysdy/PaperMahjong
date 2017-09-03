@@ -29,7 +29,7 @@ public:
 
 signals:
     void makeHappyGroup();
-
+    void balance(int deltaMoney);
     void updateTime(unsigned sec);
     void asynHandleOperations(QList<PlayerOperation> operations);
 

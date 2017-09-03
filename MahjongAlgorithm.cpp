@@ -102,13 +102,16 @@ int MahjongAlgorithm::scanMelds(const vector<unsigned> &nums, unsigned targetNum
 
 vector<unsigned> MahjongAlgorithm::scanLonelyCard(const vector<unsigned>& nums)
 {
+    vector<unsigned> copyNums(nums);
+    removeMelds(copyNums);
+    removeChows(copyNums);
     vector<unsigned> indexs;
-    //std::sort(nums.begin(), nums.end());//wrong sort broke the index;
-    for (int i = 0; i < nums.size(); i++) {
-        bool leftLonely = i - 1 >= 0? (nums[i] - nums[i - 1] > 2): true;
-        bool rightLonely = i + 1 < nums.size()? (nums[i + 1] - nums[i] > 2): true;
+    for (int i = 0; i < copyNums.size(); i++) {
+        bool leftLonely = i - 1 >= 0? (copyNums[i] - copyNums[i - 1] > 2): true;
+        bool rightLonely = i + 1 < copyNums.size()? (copyNums[i + 1] - copyNums[i] > 2): true;
         if (leftLonely && rightLonely ) {
-            indexs.push_back(i);
+            auto itor = std::find(nums.begin(), nums.end(), copyNums[i]);
+            indexs.push_back(unsigned(itor - nums.begin()));
         }
     }
     return indexs;
@@ -217,7 +220,7 @@ unsigned MahjongAlgorithm::removeMelds(vector<unsigned> &nums)
     }
     unsigned baseNums = 1;
     unsigned base = nums[0];
-    for (auto itor = nums.begin(); itor != nums.end(); ) {
+    for (auto itor = nums.begin() + 1; itor != nums.end(); ) {
         if (*itor == base) {
             if (++baseNums == 3) {
                 removeNum++;

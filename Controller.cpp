@@ -7,7 +7,8 @@
 Controller::Controller(Player *p, QObject *parent) :
     QObject(parent),
     player(p),
-    otherPlayersCard(nullptr)
+    otherPlayersCard(nullptr),
+    money(100)
 {
     desk = new QWidget();
     mainLayout = new QHBoxLayout();
@@ -15,6 +16,7 @@ Controller::Controller(Player *p, QObject *parent) :
 
     leftLayout = new QHBoxLayout();
     mainLayout->addLayout(leftLayout, 6);
+    leftLayout->addStretch(1);
 
 
     midLayout = new QVBoxLayout();
@@ -23,18 +25,19 @@ Controller::Controller(Player *p, QObject *parent) :
     cardsLayout = new QHBoxLayout();
     cardView = new CardView();
     cardView->initail(17);
-    cardView->setMinimumWidth(400);
     cardsLayout->addWidget(cardView);
-    cardsLayout->addStretch(1);
     midLayout->addLayout(btnsLayout);
     midLayout->addLayout(cardsLayout);
 
     rightLayout = new QVBoxLayout();
     mainLayout->addLayout(rightLayout);
 
-    QLabel* playerName = new QLabel("Player: " + player->getName());
+    QLabel* playerName = new QLabel(tr("Player: ") + player->getName());
+    moneyLabel = new QLabel(tr("Money: ") + QString::number(money) + tr(" Yuan"));
     timeRecoder = new QLCDNumber();
+
     rightLayout->addWidget(playerName);
+    rightLayout->addWidget(moneyLabel);
     rightLayout->addWidget(timeRecoder);
 }
 
@@ -56,9 +59,6 @@ CardView *Controller::getCardsView() const
 void Controller::connectSignals(MahjongJudgment* judgment)
 {
     connect(judgment, &MahjongJudgment::makeHappyGroup, this, &Controller::onMakeHappyGroup);
-//    connect(judgment, &MahjongJudgment::updateTime, this, &Controller::onUpdateTime);
-//    connect(judgment, &MahjongJudgment::firstStep, this, &Controller::onFirstStep);
-//    connect(judgment, &MahjongJudgment::secondStep, this, &Controller::onSecondStep);
 }
 
 void Controller::onUpdateTime(unsigned sec)
@@ -77,6 +77,31 @@ void Controller::onMakeHappyGroup()
 void Controller::onUpdatedDrawedCard(PaperCard *card)
 {
     otherPlayersCard = card;
+}
+
+void Controller::onBalance(int deltaMoney)
+{
+    money += deltaMoney;
+    moneyLabel->setText(tr("Money: ") + QString::number(money) + tr(" Yuan"));
+    clearLayout(leftLayout);
+    emit updateDrawedArea(nullptr);
+}
+
+void Controller::clearLayout(QLayout *layout)
+{
+    QLayoutItem *item;
+    while((item = layout->takeAt(0)) != 0){
+        //删除widget
+        if(item->widget()){
+            delete item->widget();
+        }
+        //删除子布局
+        QLayout *childLayout = item->layout();
+        if(childLayout){
+            clearLayout(childLayout);
+        }
+        delete item;
+    }
 }
 
 void Controller::moveToCardGroupArea(QList<PaperCard *> cards)

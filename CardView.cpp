@@ -20,10 +20,12 @@ void CardView::initail(unsigned num)
     layout = new QHBoxLayout(this);
     while (num--) {
         CardContainer* cardContainer = new CardContainer();
+        cardContainer->setMinimumWidth(80);
         layout->addWidget(cardContainer);
         cardContainers.push_back(cardContainer);
         connect(cardContainer, &CardContainer::clicked, this, &CardView::onCardClicked);
     }
+    layout->addStretch(1);
 }
 
 void CardView::setModel(CardModel *cardModel)

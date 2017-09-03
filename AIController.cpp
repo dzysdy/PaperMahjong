@@ -2,6 +2,7 @@
 #include "MahjongAlgorithmWraper.h"
 #include "PaperCard.h"
 #include <assert.h>
+#include <thread>
 #include <QDebug>
 
 const QString gButtons[] = {
@@ -31,42 +32,14 @@ void AIController::setMyTurn(bool b)
 
 void AIController::handleOperations(QList<PlayerOperation> operations)
 {
-    printf("%s: %d step: ",__func__,player->getStep());
-    for (PlayerOperation o: operations) {
-        printf(",%s", tr(gButtons[(int)o].toStdString().c_str()).toStdString().c_str());
-    }
-    printf("\n\n");
-    fflush(stdout);
-    if (operations.contains(PO_MAKEGROUP)){
-        QList<QList<PaperCard *> > results = algorithm->scanHappyGroups(player->cards());
-        for (const QList<PaperCard *>& result: results) {
-            selectCardsOnly(result);
-            player->makeHappyGroup();
-        }
-        player->makeHappyGroupOk();
-    }
-    else {
-        if (player->testWinning(otherPlayersCard)) {
-            //emit to judgment;
-            return;
-        }
-        operations.removeOne(PO_WIN);
-        meldsCount = algorithm->calcCurrentScore(player->cards());
-        qDebug()<<__func__<<"meldsCount:"<<meldsCount;
-
-        float highScore = meldsCount;
-        PlayerOperation highScoreOperation;
-        for (PlayerOperation operation: operations) {
-            QList<PaperCard *> data;
-            float score = calcOperationScore(operation, data);
-            if (score > highScore) {
-                highScore = score;
-                highScoreOperation = operation;
-                operatData = data;
-            }
-        }
-        doOperation(highScoreOperation);
-    }
+//    printf("%s: %d step: ",__func__,player->getStep());
+//    for (PlayerOperation o: operations) {
+//        printf(",%s", tr(gButtons[(int)o].toStdString().c_str()).toStdString().c_str());
+//    }
+//    printf("\n\n");
+//    fflush(stdout);
+    std::thread t1(&AIController::handleOperationThread, this, operations);
+    t1.join();
 }
 
 void AIController::selectCardsOnly(const QList<PaperCard *> &cards)
@@ -185,4 +158,37 @@ int AIController::calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList
         }
     }
     return algorithm->calcCurrentScore(cards);
+}
+
+void AIController::handleOperationThread(QList<PlayerOperation> operations)
+{
+    if (operations.contains(PO_MAKEGROUP)){
+        QList<QList<PaperCard *> > results = algorithm->scanHappyGroups(player->cards());
+        for (const QList<PaperCard *>& result: results) {
+            selectCardsOnly(result);
+            player->makeHappyGroup();
+        }
+        player->makeHappyGroupOk();
+    }
+    else {
+        if (player->testWinning(otherPlayersCard)) {
+            return;
+        }
+        operations.removeOne(PO_WIN);
+        meldsCount = algorithm->calcCurrentScore(player->cards());
+        qDebug()<<__func__<<"meldsCount:"<<meldsCount;
+
+        float highScore = meldsCount;
+        PlayerOperation highScoreOperation = player->getStep() == 1? PO_DRAW: PO_DISCARD;
+        for (PlayerOperation operation: operations) {
+            QList<PaperCard *> data;
+            float score = calcOperationScore(operation, data);
+            if (score > highScore) {
+                highScore = score;
+                highScoreOperation = operation;
+                operatData = data;
+            }
+        }
+        doOperation(highScoreOperation);
+    }
 }

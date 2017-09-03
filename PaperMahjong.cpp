@@ -24,7 +24,17 @@ void PaperMahjong::dealingCards(unsigned num, QList<PaperCard *> &paperCards) {
 PaperCard *PaperMahjong::getCard() {
     int randIndex = qrand()%cardNumbers.size();
     unsigned cardNumber = cardNumbers.takeAt(randIndex);
-    return new PaperCard(cardNumber);
+    PaperCard* card = new PaperCard(cardNumber);
+    dealedCards.push_back(card);
+    return card;
+}
+
+void PaperMahjong::destoryDealedCards()
+{
+    for (PaperCard* card: dealedCards) {
+        delete card;
+    }
+    dealedCards.clear();
 }
 
 void PaperMahjong::initCustomCard(unsigned begin) {

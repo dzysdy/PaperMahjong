@@ -13,6 +13,7 @@ public:
     void shuffleCards();
     void dealingCards(unsigned num, QList<PaperCard*>& paperCards);
     PaperCard* getCard();
+    void destoryDealedCards();
 
 signals:
 
@@ -23,6 +24,7 @@ private:
     void initFourCards(unsigned cardNumber);
 
     QList<unsigned> cardNumbers;
+    QList<PaperCard*> dealedCards;
 };
 
 #endif // PAPERMAHJONG_H

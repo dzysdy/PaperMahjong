@@ -3,11 +3,14 @@
 #include "Util.h"
 #include <QDebug>
 
+#define CARDMINWIDTH 80
+#define CARDMINHEIGHT 200
 CardContainer::CardContainer(QWidget *parent) :
     QLabel(parent),
     paperCard(nullptr),
     selected(false)
 {
+    this->setMinimumWidth(CARDMINWIDTH);
 }
 
 CardContainer::CardContainer(const QString &text, QWidget *parent) :
@@ -15,12 +18,13 @@ CardContainer::CardContainer(const QString &text, QWidget *parent) :
     paperCard(nullptr),
     selected(false)
 {
+    this->setMinimumWidth(CARDMINWIDTH);
 }
 
 void CardContainer::setImage(const QImage &image)
 {
     if (!image.isNull()) {
-        QImage img = image.scaledToHeight(200);
+        QImage img = image.scaledToHeight(CARDMINHEIGHT);
         setPixmap(QPixmap::fromImage(img));
         setMinimumWidth(img.width());
         setMaximumWidth(img.width());

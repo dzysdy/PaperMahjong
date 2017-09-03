@@ -38,7 +38,7 @@ void MainWindow::initail()
 {
     mahjong = new PaperMahjong();
     judgment = new MahjongJudgment(mahjong);
-    player1 = new Player(mahjong, judgment, "DuAn", 0);
+    player1 = new Player(mahjong, judgment, "DuAn", 1);
     player2 = new Player(mahjong, judgment, "2mlAI", 1);
     judgment->addPlayer(player1);
     judgment->addPlayer(player2);
@@ -56,14 +56,12 @@ void MainWindow::onUpdateDrawedArea(PaperCard *card)
         drawedCardContainer = new QLabel();
         ui->drawedCardArea->addWidget(drawedCardContainer);
     }
-    QImage image(Util::getResourcePath() + "sg/" +card->getName());
-    drawedCardContainer->setPixmap(QPixmap::fromImage(image.scaledToHeight(200)));
-    PaperCard* oldCard = static_cast<PaperCard*>(drawedCardContainer->userData(0));
-    delete oldCard;
     if (card) {
-        emit updateDrawedCard(card);
+        QImage image(Util::getResourcePath() + "sg/" +card->getName());
+        drawedCardContainer->setPixmap(QPixmap::fromImage(image.scaledToHeight(200)));
         drawedCardContainer->setUserData(0, card);
         drawedCardContainer->update();
+        emit updateDrawedCard(card);
     }
 }
 
