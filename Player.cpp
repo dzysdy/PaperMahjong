@@ -19,7 +19,7 @@ Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, const QString& 
     paperCards(cardModel->cards),
     algorithm(MahjongAlgorithmWraper::instance())
 {
-    controller->connectSignals(judgment);
+    cardModel->setFaceUp(controllerType == 0);
 }
 
 Player::~Player()
@@ -30,6 +30,7 @@ Player::~Player()
 
 void Player::initCards(const QList<PaperCard *>& cards)
 {
+    step = -1;
     groupCount = 0;
     cardModel->setData(cards);
     std::sort(paperCards.begin(), paperCards.end(), [](PaperCard* pc1, PaperCard* pc2){return *pc1 < *pc2;});
@@ -38,10 +39,11 @@ void Player::initCards(const QList<PaperCard *>& cards)
 
 PaperCard* Player::drawsCard() {
     PaperCard* card = paperMahjong->getCard();
-    card->setSelected(true);
-    addCardToModel(card);
+    if (card) {
+        card->setSelected(true);
+        addCardToModel(card);
+    }
     lastOperation = PO_DRAW;
-    notifyStepCompleted();
     return card;
 }
 
@@ -52,7 +54,6 @@ bool Player::discard()
         removeCardsFromModel(cards);
         emit controller->updateDrawedArea(cards.first());
         lastOperation = PO_DISCARD;
-        notifyStepCompleted();
         return true;
     }
     return false;
@@ -66,7 +67,6 @@ bool Player::chows(PaperCard* drawedCard)
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
         lastOperation = PO_CHOWS;
-        notifyStepCompleted();
         return true;
     }
     return false;
@@ -80,7 +80,6 @@ bool Player::pongs(PaperCard* drawedCard)
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
         lastOperation = PO_PONGS;
-        notifyStepCompleted();
         return true;
     }
     return false;
@@ -94,7 +93,6 @@ bool Player::makePair(PaperCard* drawedCard)
         removeCardsFromModel(cards);
         controller->moveToCardGroupArea(cards);
         lastOperation = PO_PAIR;
-        notifyStepCompleted();
         return true;
     }
     return false;
@@ -133,19 +131,16 @@ bool Player::testWinning(PaperCard *drawedCard)
 void Player::makeHappyGroupOk()
 {
     groupCount = (17 - paperCards.size())/3;
-    controller->setMyTurn(false);
-    emit makedHappyGroup();
+    emit makeHappyGroupCompleted();
 }
 
 void Player::doFirstStep(int /*operation*/)
 {
-    controller->setMyTurn(true);
     step = 1;
 }
 
 void Player::doSecondStep(int /*operation*/)
 {
-    controller->setMyTurn(true);
     step = 2;
 }
 
@@ -154,14 +149,8 @@ QWidget *Player::desk()
     return controller->widget();
 }
 
-void Player::onMakeHappyGroup()
-{
-    controller->setMyTurn(true);
-}
-
 void Player::notifyStepCompleted()
 {
-    controller->setMyTurn(false);
     if (step == 1) {
         emit firstStepCompleted(lastOperation);
     }

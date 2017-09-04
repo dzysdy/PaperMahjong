@@ -31,8 +31,8 @@ WorkDesk::~WorkDesk()
 
 void WorkDesk::setMyTurn(bool show)
 {
-    showBtn = show;
-    if (!showBtn)
+    showBtn = true;
+    if (!show)
         hideAllButtons();
 }
 
@@ -62,10 +62,10 @@ void WorkDesk::showButtons(QList<PlayerOperation> operations)
     }
 }
 
-void WorkDesk::handleOperations(QList<PlayerOperation> operations)
+void WorkDesk::handleOperations()
 {
     hideAllButtons();
-    showButtons(operations);
+    showButtons(playerOperations);
 }
 
 void WorkDesk::hideAllButtons()
@@ -85,41 +85,51 @@ void WorkDesk::onOperatBtnClicked()
     if (name == tr("liaoxi")) {
         if (!player->makeHappyGroup()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Not a Hapyy Group."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
         }
     }
     else if (name == tr("mo")) {
-        player->drawsCard();
+        if (!player->drawsCard()) {
+
+        }
     }
     else if (name == tr("da")) {
         if (!player->discard()) {
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
         }
     }
     else if (name == tr("chi")) {
         if (!player->chows(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
         }
     }
     else if (name == tr("peng")) {
         if (!player->pongs(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select two cards first."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
         }
     }
     else if (name == tr("ding")) {
         if (!player->makePair(otherPlayersCard)){
             QMessageBox::information(NULL, tr("Warning"), tr("Please select a card first."), QMessageBox::Ok, QMessageBox::Ok);
+            return;
         }
     }
     else if (name == tr("hu")) {
         if (player->testWinning(otherPlayersCard)){
-            //QMessageBox::information(NULL, tr("Congradulations!"), tr("You Win! 200."), QMessageBox::Ok, QMessageBox::Ok);
         }
+        return;
     }
     else if (name == tr("guoxi")) {
         player->attachHappyGroup();
     }
     else if (name == tr("ok")) {
         player->makeHappyGroupOk();
+        return;
     }
+    setMyTurn(false);
+    player->notifyStepCompleted();
 }
 

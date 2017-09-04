@@ -39,6 +39,7 @@ Controller::Controller(Player *p, QObject *parent) :
     rightLayout->addWidget(playerName);
     rightLayout->addWidget(moneyLabel);
     rightLayout->addWidget(timeRecoder);
+    connect(this, &Controller::asynHandleOperations, this, &Controller::onHandleOperations, Qt::QueuedConnection);
 }
 
 Controller::~Controller()
@@ -54,11 +55,6 @@ QWidget *Controller::widget()
 CardView *Controller::getCardsView() const
 {
     return cardView;
-}
-
-void Controller::connectSignals(MahjongJudgment* judgment)
-{
-    connect(judgment, &MahjongJudgment::makeHappyGroup, this, &Controller::onMakeHappyGroup);
 }
 
 void Controller::onUpdateTime(unsigned sec)
@@ -79,6 +75,11 @@ void Controller::onUpdatedDrawedCard(PaperCard *card)
     otherPlayersCard = card;
 }
 
+void Controller::onHandleOperations()
+{
+    handleOperations();
+}
+
 void Controller::onBalance(int deltaMoney)
 {
     money += deltaMoney;
@@ -87,15 +88,19 @@ void Controller::onBalance(int deltaMoney)
     emit updateDrawedArea(nullptr);
 }
 
+void Controller::handleOperations(QList<PlayerOperation> operations)
+{
+    playerOperations = operations;
+    emit asynHandleOperations();
+}
+
 void Controller::clearLayout(QLayout *layout)
 {
     QLayoutItem *item;
     while((item = layout->takeAt(0)) != 0){
-        //删除widget
         if(item->widget()){
             delete item->widget();
         }
-        //删除子布局
         QLayout *childLayout = item->layout();
         if(childLayout){
             clearLayout(childLayout);
@@ -109,9 +114,4 @@ void Controller::moveToCardGroupArea(QList<PaperCard *> cards)
     HappyGroupWidget* hg = new HappyGroupWidget();
     hg->setCards(cards);
     leftLayout->addWidget(hg);
-}
-
-void Controller::setMyTurn(bool b)
-{
-    isMyTurn = b;
 }

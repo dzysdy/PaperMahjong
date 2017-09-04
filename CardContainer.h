@@ -11,7 +11,7 @@ public:
     CardContainer(QWidget *parent=Q_NULLPTR);
     CardContainer(const QString &text, QWidget *parent=Q_NULLPTR);
 
-    void setCard(PaperCard* card);
+    void setCard(PaperCard* card, bool faceUp = true);
     PaperCard *getPaperCard() const;
 
 protected:

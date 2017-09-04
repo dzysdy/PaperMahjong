@@ -16,7 +16,7 @@ public:
     void destoryDealedCards();
 
 signals:
-
+    void draws();
 public slots:
 
 private:
@@ -25,6 +25,7 @@ private:
 
     QList<unsigned> cardNumbers;
     QList<PaperCard*> dealedCards;
+    bool shuffled;
 };
 
 #endif // PAPERMAHJONG_H

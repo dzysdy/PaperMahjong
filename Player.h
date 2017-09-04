@@ -45,9 +45,11 @@ public:
     bool attachHappyGroup();
     bool testWinning(PaperCard* drawedCard);
 
+
     void makeHappyGroupOk();
     void doFirstStep(int operation);
     void doSecondStep(int operation);
+    void notifyStepCompleted();
 
     QWidget* desk();
     Controller *getController() const;
@@ -56,16 +58,14 @@ public:
     int getGroupCount() const;
 
 signals:
-    void firstStepCompleted(PlayerOperation operation);
+    void firstStepCompleted(int operation);
     void secondStepCompleted(PlayerOperation operation);
-    void makedHappyGroup();
+    void makeHappyGroupCompleted();
     void winningHand(Player* player);
 
-public slots:    
-    void onMakeHappyGroup();
+public slots:
 
 private:
-    void notifyStepCompleted();
     QList<PaperCard*> getSelectedCards();
 
     //update model

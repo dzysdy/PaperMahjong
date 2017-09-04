@@ -23,7 +23,7 @@ private slots:
     void onCardClicked();
 
 private:
-    void showData(QList<PaperCard*> data);
+    void showData(CardModel *cardModel);
 
     CardModel* model;
     QHBoxLayout* layout;

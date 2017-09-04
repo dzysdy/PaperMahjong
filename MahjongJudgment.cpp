@@ -2,6 +2,7 @@
 #include "PaperMahjong.h"
 #include "PaperCard.h"
 #include "Controller.h"
+#include <future>
 #include <QMessageBox>
 
 #define BEFORE_DRAWSCARD_TIME 30
@@ -11,6 +12,8 @@ MahjongJudgment::MahjongJudgment(PaperMahjong *mahjong, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong)
 {
+    connect(paperMahjong, &PaperMahjong::draws, this, &MahjongJudgment::onDraws);
+    connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);
 }
 
 void MahjongJudgment::addPlayer(Player *player) {
@@ -42,11 +45,11 @@ void MahjongJudgment::onTimer()
     }
 }
 
-void MahjongJudgment::onFirstStepCompleted(PlayerOperation operation)
+void MahjongJudgment::onFirstStepCompleted(int operation)
 {
     lastStep = OS_FIRSTSTEP;
     isTimeRecording = false;
-    doSecondStep(operation);
+    doSecondStep((PlayerOperation)operation);
 }
 
 void MahjongJudgment::onSecondStepCompleted(PlayerOperation operation)
@@ -69,7 +72,7 @@ void MahjongJudgment::onSecondStepCompleted(PlayerOperation operation)
     }
 }
 
-void MahjongJudgment::onMakedHappyGroup()
+void MahjongJudgment::onMakeHappyGroupCompleted()
 {
     lastStep = OS_HAPPYGROUP;
     isTimeRecording = false;
@@ -98,9 +101,18 @@ void MahjongJudgment::onUpdateTime(unsigned sec)
     currentPlayer()->getController()->onUpdateTime(sec);
 }
 
-void MahjongJudgment::onHandleOperations(QList<PlayerOperation> operations)
+void MahjongJudgment::handleOperations(QList<PlayerOperation> operations)
 {
     currentPlayer()->getController()->handleOperations(operations);
+}
+
+void MahjongJudgment::onDraws()
+{
+    for (Player* player: players) {
+        player->getController()->onBalance(0);
+    }
+    paperMahjong->destoryDealedCards();
+    start();
 }
 
 void MahjongJudgment::playersDrawsCards()
@@ -116,13 +128,11 @@ void MahjongJudgment::playersDrawsCards()
 
 void MahjongJudgment::connectSignals(Player *player)
 {
-    connect(this, &MahjongJudgment::makeHappyGroup, player, &Player::onMakeHappyGroup);
     connect(player, &Player::firstStepCompleted, this, &MahjongJudgment::onFirstStepCompleted);
     connect(player, &Player::secondStepCompleted, this, &MahjongJudgment::onSecondStepCompleted );
-    connect(player, &Player::makedHappyGroup, this, &MahjongJudgment::onMakedHappyGroup);
+    connect(player, &Player::makeHappyGroupCompleted, this, &MahjongJudgment::onMakeHappyGroupCompleted);
     connect(player, &Player::winningHand, this, &MahjongJudgment::onWinningHand);
-    connect(this, &MahjongJudgment::updateTime, this, &MahjongJudgment::onUpdateTime);
-    connect(this, &MahjongJudgment::asynHandleOperations, this, &MahjongJudgment::onHandleOperations);
+    connect(this, &MahjongJudgment::makeHappyGroup, player->getController(), &Controller::onMakeHappyGroup);
 }
 
 void MahjongJudgment::changeTurn()
@@ -150,7 +160,8 @@ void MahjongJudgment::doFirstStep(PlayerOperation operation)
     currentPlayer()->doFirstStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
-    emit asynHandleOperations(operations);
+    //std::async(std::launch::async, [this, operations]{ onHandleOperations(operations); });
+    handleOperations(operations);
     timeReminded = BEFORE_DRAWSCARD_TIME;
     isTimeRecording = true;
 }
@@ -161,7 +172,7 @@ void MahjongJudgment::doSecondStep(PlayerOperation operation)
     currentPlayer()->doSecondStep(0);
     QList<PlayerOperation> operations;
     calcOperatrion(operation, operations);
-    emit asynHandleOperations(operations);
+    handleOperations(operations);
     timeReminded = AFTER_DRAWSCARD_TIME;
     isTimeRecording = true;
 }
@@ -180,9 +191,11 @@ void MahjongJudgment::enforce()
         break;
     case OS_FIRSTSTEP:
         player->drawsCard();
+        player->notifyStepCompleted();
         break;
     case OS_SECONDSTEP:
         enforceDiscard(player);
+        player->notifyStepCompleted();
         break;
     default:
         break;

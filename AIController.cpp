@@ -1,6 +1,7 @@
 #include "AIController.h"
 #include "MahjongAlgorithmWraper.h"
 #include "PaperCard.h"
+#include "CardView.h"
 #include <assert.h>
 #include <thread>
 #include <QDebug>
@@ -22,15 +23,10 @@ AIController::AIController(Player *p, QObject *parent):
     Controller(p, parent),
     algorithm(MahjongAlgorithmWraper::instance())
 {
-
+    //cardView->hide();
 }
 
-void AIController::setMyTurn(bool b)
-{
-    Controller::setMyTurn(b);
-}
-
-void AIController::handleOperations(QList<PlayerOperation> operations)
+void AIController::handleOperations()
 {
 //    printf("%s: %d step: ",__func__,player->getStep());
 //    for (PlayerOperation o: operations) {
@@ -38,8 +34,11 @@ void AIController::handleOperations(QList<PlayerOperation> operations)
 //    }
 //    printf("\n\n");
 //    fflush(stdout);
-    std::thread t1(&AIController::handleOperationThread, this, operations);
-    t1.join();
+
+
+    handleOperationThread(playerOperations);
+//    std::thread t1(&AIController::handleOperationThread, this, operations);
+//    t1.join();
 }
 
 void AIController::selectCardsOnly(const QList<PaperCard *> &cards)
@@ -104,7 +103,7 @@ float AIController::calcOperationScore(PlayerOperation operation, QList<PaperCar
     return score;
 }
 
-void AIController::doOperation(PlayerOperation operation)
+bool AIController::doOperation(PlayerOperation operation)
 {
     switch (operation) {
     case PO_CHOWS:
@@ -134,7 +133,9 @@ void AIController::doOperation(PlayerOperation operation)
     }
         break;
     case PO_DRAW:
-        player->drawsCard();
+        if (!player->drawsCard()) {
+            return false;
+        }
         break;
     case PO_MAKEGROUP:
 
@@ -148,6 +149,7 @@ void AIController::doOperation(PlayerOperation operation)
     default:
         break;
     }
+    return true;
 }
 
 int AIController::calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList<PaperCard *> &cardsToRemove)
@@ -162,6 +164,7 @@ int AIController::calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList
 
 void AIController::handleOperationThread(QList<PlayerOperation> operations)
 {
+    bool needNotify = true;
     if (operations.contains(PO_MAKEGROUP)){
         QList<QList<PaperCard *> > results = algorithm->scanHappyGroups(player->cards());
         for (const QList<PaperCard *>& result: results) {
@@ -169,6 +172,7 @@ void AIController::handleOperationThread(QList<PlayerOperation> operations)
             player->makeHappyGroup();
         }
         player->makeHappyGroupOk();
+        needNotify = false;
     }
     else {
         if (player->testWinning(otherPlayersCard)) {
@@ -189,6 +193,9 @@ void AIController::handleOperationThread(QList<PlayerOperation> operations)
                 operatData = data;
             }
         }
-        doOperation(highScoreOperation);
+        needNotify = doOperation(highScoreOperation);
+    }
+    if (needNotify) {
+        player->notifyStepCompleted();
     }
 }

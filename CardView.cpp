@@ -37,7 +37,7 @@ void CardView::setModel(CardModel *cardModel)
 
 void CardView::update()
 {
-    showData(model->data());
+    showData(model);
 }
 
 void CardView::onUpdated()
@@ -48,18 +48,19 @@ void CardView::onUpdated()
 void CardView::onCardClicked()
 {}
 
-void CardView::showData(QList<PaperCard *> data)
+void CardView::showData(CardModel *cardModel)
 {
+    const QList<PaperCard *>& data = cardModel->data();
     for (int i = 0; i < cardContainers.size(); i++) {
         PaperCard* card = cardContainers[i]->getPaperCard();
         if (i < data.size()) {
             PaperCard* newCard = data[i];
             if (newCard != card) {
-                cardContainers[i]->setCard(newCard);
+                cardContainers[i]->setCard(newCard, cardModel->getFaceUp());
             }
         }
         else {
-            cardContainers[i]->setCard(nullptr);
+            cardContainers[i]->setCard(nullptr, cardModel->getFaceUp());
         }
     }
 }

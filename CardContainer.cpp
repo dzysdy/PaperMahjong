@@ -39,12 +39,14 @@ void CardContainer::setSelected(bool b)
     }
 }
 
-void CardContainer::setCard(PaperCard *card)
+void CardContainer::setCard(PaperCard *card, bool faceUp)
 {
     setSelected(false);
     paperCard = card;
     if (paperCard) {
-        QImage image(Util::getResourcePath() + "/sg/" + paperCard->getName());
+        QString path = Util::getResourcePath() + "/sg/";
+        path += faceUp? paperCard->getName(): "bg.jpg";
+        QImage image(path);
         setText(card->getName());
         setImage(image);
         show();

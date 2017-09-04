@@ -11,7 +11,7 @@ public:
     virtual ~WorkDesk();
 
     virtual void setMyTurn(bool show);
-    virtual void handleOperations(QList<PlayerOperation> operations);
+    virtual void handleOperations();
 
 public slots:
     void onOperatBtnClicked();

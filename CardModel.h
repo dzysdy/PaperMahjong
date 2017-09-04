@@ -12,8 +12,11 @@ public:
     ~CardModel();
 
     void update();
-    QList<PaperCard*> data();
+    const QList<PaperCard *> &data();
     void setData(const QList<PaperCard*>& data);
+
+    bool getFaceUp() const;
+    void setFaceUp(bool value);
 
 signals:
     void updated();
@@ -22,6 +25,7 @@ private:
     friend class Player;
 
     QList<PaperCard*> cards;
+    bool faceUp;
 };
 
 #endif // CARDMODEL_H

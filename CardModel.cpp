@@ -3,7 +3,8 @@
 #include "Player.h"
 
 CardModel::CardModel(QObject *parent):
-    QObject(parent)
+    QObject(parent),
+    faceUp(true)
 {
 
 }
@@ -17,7 +18,7 @@ void CardModel::update()
     emit updated();
 }
 
-QList<PaperCard *> CardModel::data()
+const QList<PaperCard *>& CardModel::data()
 {
     return cards;
 }
@@ -25,5 +26,15 @@ QList<PaperCard *> CardModel::data()
 void CardModel::setData(const QList<PaperCard *> &data)
 {
     cards = data;
+}
+
+bool CardModel::getFaceUp() const
+{
+    return faceUp;
+}
+
+void CardModel::setFaceUp(bool value)
+{
+    faceUp = value;
 }
 

@@ -31,17 +31,17 @@ signals:
     void makeHappyGroup();
     void balance(int deltaMoney);
     void updateTime(unsigned sec);
-    void asynHandleOperations(QList<PlayerOperation> operations);
 
 public slots:
     void onTimer();
-    void onFirstStepCompleted(PlayerOperation operation);
+    void onFirstStepCompleted(int operation);
     void onSecondStepCompleted(PlayerOperation operation);
-    void onMakedHappyGroup();
+    void onMakeHappyGroupCompleted();
     void onWinningHand(Player* player);
 
     void onUpdateTime(unsigned sec);
-    void onHandleOperations(QList<PlayerOperation> operations);
+    void handleOperations(QList<PlayerOperation> operations);
+    void onDraws();
 
 private:
     void playersDrawsCards();

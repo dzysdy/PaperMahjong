@@ -24,20 +24,21 @@ public:
 
     QWidget* widget();
     CardView *getCardsView() const;
-    void connectSignals(MahjongJudgment* judgment);
     void moveToCardGroupArea(QList<PaperCard *> cards);
     void onUpdateTime(unsigned sec);
     void onBalance(int deltaMoney);
-
-    virtual void setMyTurn(bool b);
-    virtual void handleOperations(QList<PlayerOperation>){}
+    void handleOperations(QList<PlayerOperation>);
+    //virtual void setMyTurn(bool b);
+    virtual void handleOperations(){}
 
 signals:
     void updateDrawedArea(PaperCard *card);
+    void asynHandleOperations();
 
 public slots:
     void onMakeHappyGroup();
     void onUpdatedDrawedCard(PaperCard* card);
+    void onHandleOperations();
 
 protected:
     void clearLayout(QLayout *layout);
@@ -55,9 +56,9 @@ protected:
 
     QLCDNumber* timeRecoder;
     PaperCard* otherPlayersCard;
-    bool isMyTurn;
     int money;
     QLabel* moneyLabel;
+    QList<PlayerOperation> playerOperations;
 };
 
 #endif // CONTROLLER_H

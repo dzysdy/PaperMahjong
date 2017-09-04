@@ -8,13 +8,12 @@ class AIController : public Controller
 
 public:
     AIController(Player* p, QObject *parent = 0);
-    virtual void setMyTurn(bool b);
-    virtual void handleOperations(QList<PlayerOperation> operations);
+    virtual void handleOperations();
 
 private:
     void selectCardsOnly(const QList<PaperCard *>& cards);
     float calcOperationScore(PlayerOperation operation, QList<PaperCard *> &data);
-    void doOperation(PlayerOperation operation);
+    bool doOperation(PlayerOperation operation);
     int calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList<PaperCard*>& cardsToRemove);
     void handleOperationThread(QList<PlayerOperation> operations);
 
