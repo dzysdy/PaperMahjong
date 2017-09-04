@@ -3,6 +3,8 @@
 #include <QTranslator>
 #include "Util.h"
 
+//^[ \t]*[^ \t\n\r]+.*$
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
