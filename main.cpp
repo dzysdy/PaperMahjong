@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     a.installTranslator(&qtTranslator);
 
     MainWindow w;
-    w.show();
+    w.showFullScreen();
 
     return a.exec();
 }

@@ -29,7 +29,7 @@ class Player : public QObject
 
     friend class MahjongJudgment;
 public:
-    explicit Player(PaperMahjong* mahjong, MahjongJudgment* judgment, const QString& playerName, int controllerType = 0, QObject *parent = 0);
+    explicit Player(PaperMahjong* mahjong, const QString& playerName, int controllerType = 0, QObject *parent = 0);
     ~Player();
 
     QList<PaperCard*> cards() {return paperCards;}

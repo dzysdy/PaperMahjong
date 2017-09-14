@@ -37,8 +37,7 @@ void AIController::handleOperations()
 
 
     handleOperationThread(playerOperations);
-//    std::thread t1(&AIController::handleOperationThread, this, operations);
-//    t1.join();
+//    std::thread t1(&AIController::handleOperationThread, this, playerOperations); t1.detach();
 }
 
 void AIController::selectCardsOnly(const QList<PaperCard *> &cards)
@@ -164,6 +163,7 @@ int AIController::calcScoreWhenRemoveCards(QList<PaperCard *> cards, const QList
 
 void AIController::handleOperationThread(QList<PlayerOperation> operations)
 {
+//    std::this_thread::sleep_for(std::chrono::seconds(3));
     bool needNotify = true;
     if (operations.contains(PO_MAKEGROUP)){
         QList<QList<PaperCard *> > results = algorithm->scanHappyGroups(player->cards());

@@ -66,6 +66,7 @@ void CardContainer::updateView()
         this->move(x(), y() + 20);
     }
     paperCard->setSelected(selected);
+    this->update();
 }
 
 void CardContainer::mousePressEvent(QMouseEvent *)
