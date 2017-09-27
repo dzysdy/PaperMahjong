@@ -3,6 +3,7 @@
 #include "CardContainer.h"
 #include "HappyGroupWidget.h"
 #include "MahjongJudgment.h"
+#include <QApplication>
 
 Controller::Controller(Player *p, QObject *parent) :
     QObject(parent),

@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <QApplication>
 
-Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, const QString& playerName, int controllerType, QObject *parent) :
+Player::Player(PaperMahjong* mahjong, const QString& playerName, int controllerType, QObject *parent) :
     QObject(parent),
     paperMahjong(mahjong),
     name(playerName),
