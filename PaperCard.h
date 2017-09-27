@@ -23,7 +23,7 @@ public:
     };
 
     explicit PaperCard(unsigned number, QObject *parent = 0);
-
+    ~PaperCard() = default;
     bool operator < (const PaperCard& that) {
         return this->cardNumber < that.cardNumber;
     }

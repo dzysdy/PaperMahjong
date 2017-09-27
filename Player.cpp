@@ -9,6 +9,7 @@
 #include "CardModel.h"
 #include "ControllerFactory.h"
 #include <algorithm>
+#include <QApplication>
 
 Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, const QString& playerName, int controllerType, QObject *parent) :
     QObject(parent),
@@ -20,6 +21,7 @@ Player::Player(PaperMahjong* mahjong, MahjongJudgment *judgment, const QString& 
     algorithm(MahjongAlgorithmWraper::instance())
 {
     cardModel->setFaceUp(controllerType == 0);
+   // moveToThread(QApplication::instance()->thread());
 }
 
 Player::~Player()

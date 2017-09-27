@@ -37,8 +37,8 @@ void AIController::handleOperations()
 
 
     handleOperationThread(playerOperations);
-//    std::thread t1(&AIController::handleOperationThread, this, operations);
-//    t1.join();
+    //std::thread t1(&AIController::handleOperationThread, this, playerOperations);t1.join();
+
 }
 
 void AIController::selectCardsOnly(const QList<PaperCard *> &cards)

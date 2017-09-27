@@ -10,7 +10,7 @@ CardContainer::CardContainer(QWidget *parent) :
     paperCard(nullptr),
     selected(false)
 {
-    this->setMinimumWidth(CARDMINWIDTH);
+    //this->setMinimumWidth(CARDMINWIDTH);
 }
 
 CardContainer::CardContainer(const QString &text, QWidget *parent) :
@@ -18,7 +18,7 @@ CardContainer::CardContainer(const QString &text, QWidget *parent) :
     paperCard(nullptr),
     selected(false)
 {
-    this->setMinimumWidth(CARDMINWIDTH);
+    //this->setMinimumWidth(CARDMINWIDTH);
 }
 
 void CardContainer::setImage(const QImage &image)
