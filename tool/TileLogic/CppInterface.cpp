@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <set>
 #include <time.h>
+#include <queue>
 using std::set;
 
 CppInterface::CppInterface()
@@ -275,8 +276,114 @@ int calcReadySteps(const vector<unsigned>& nums, vector<Melds> melds, set<unsign
     return minReadySteps;
 }
 
+struct Combination
+{
+
+};
+
+class MeldsTree2
+{
+    int index;
+    Melds* melds;
+    MeldsTree2* parent;
+    MeldsTree2* right;
+};
+
+class MeldsTree
+{
+public:
+    MeldsTree(){}
+    MeldsTree(int i, Melds* m):
+        index(i), melds(m){}
+
+    int index;
+    Melds* melds;
+    vector<MeldsTree*> children;
+};
+
+
+void binaryTreePaths(vector<string>& result, MeldsTree* root, string path)
+{
+    if(root->children.empty()) result.push_back(path);
+    else
+    {
+        for (MeldsTree* meldsTree : root->children)
+        {
+            if (meldsTree)
+                binaryTreePaths(result, meldsTree, path+"->"+(string)(meldsTree->melds->toStr()));
+        }
+    }
+}
+
+
+vector<string> binaryTreePaths(MeldsTree* root)
+{
+    vector<string> result;
+    if(!root) return result;
+
+    binaryTreePaths(result, root, " T_T ");
+    return result;
+}
+
+MeldsTree* createMeldsTree(int base, Melds::MeldsType type, int parentIndex)
+{
+    Melds* melds = new Melds(base, type, 0);
+    int deltaIndex = type == Melds::MT_PAIR? 2 : 3;
+    return new MeldsTree(deltaIndex + parentIndex, melds);
+}
+
+MeldsTree* buildMeldsTree(vector<unsigned> nums, vector<Melds>& melds)
+{
+    MeldsTree* root = new MeldsTree(0, nullptr);
+    std::queue<MeldsTree*> meldsTrees;
+    meldsTrees.push(root);
+
+    while (!meldsTrees.empty())
+    {
+        MeldsTree* current = meldsTrees.front();
+        meldsTrees.pop();
+        //if (current->melds)
+            //qDebug()<<current->melds->toStr();
+        int index = current->index;
+        if (index >= nums.size())
+            continue;
+        int base = nums[index];
+        if (index + 1 < nums.size() && nums[index + 1] == base) {
+            MeldsTree* tmp = createMeldsTree(base, Melds::MT_PAIR, index);
+            current->children.push_back(tmp);
+            if (index + 2 < nums.size() && nums[index + 2] == base) {
+                current->children.push_back(createMeldsTree(base, Melds::MT_MELD, index));
+            }
+        }
+
+        int delta = 1;
+        for (int j = index + 1; j < nums.size(); j++) {
+            if (nums[j] > base + delta)
+                break;
+            if (nums[j] == base + delta) {
+                if (++delta == 3) {
+                    current->children.push_back(createMeldsTree(base, Melds::MT_CHOW, index));
+                }
+            }
+        }
+        for (MeldsTree* meldsTree : current->children)
+        {
+            //qDebug()<<meldsTree->melds->toStr();
+            meldsTrees.push(meldsTree);
+        }
+    }
+    return root;
+}
+
 void findAllMelds(vector<unsigned> nums, vector<Melds>& melds)
 {
+    MeldsTree* root = buildMeldsTree(nums, melds);
+    vector<string> paths = binaryTreePaths(root);
+    for (string path : paths)
+    {
+        qDebug()<<path.c_str();
+    }
+    return;
     if (nums.size() < 3)
         return;
     int id = 0;
