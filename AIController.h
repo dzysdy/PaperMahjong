@@ -20,6 +20,7 @@ private:
     MahjongAlgorithmWraper* algorithm;
     QList<PaperCard *> operatData;
     float meldsCount;
+	string test;
 };
 
 #endif // AICONTROLLER_H
