@@ -23,9 +23,9 @@ AIController::AIController(Player *p, QObject *parent):
 
 }
 
-void AIController::setMyTurn(bool b)
+void AIController::setMyTurn(bool c)
 {
-    Controller::setMyTurn(b);
+    Controller::setMyTurn(c);
 }
 
 void AIController::handleOperations(QList<PlayerOperation> operations)
